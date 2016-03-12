@@ -1,0 +1,21 @@
+TODO:
+  - Konvertera BETA.Color till en liknande struktur som BETA.vector har
+    eller slopa den helt
+
+  - Om möjligt, försöker man rita en bild som inte laddats ännu
+    ska all rendering pausas tills bilden laddats, varvid all rendering
+    av både bilden och senare renderings-calls återupptas
+    Detta kan dock ge problem med clearScreen och olika timings,
+    så alternativt kasta bara error
+
+  - Fixa BETA.Canvas-instansers .context inför release
+
+  - Tangentbords-funktioner
+
+  - Mus-funktioner
+
+  - Experimentera med Canvas-funktionerna och se till att
+    BETA.Canvas funktioner kan användas tillsammans med egen kod.
+    * Funkar de om man har kört beginPath() med inte closePath()?
+      Om inte, kastas vettiga errors?
+    * Se till att inte påverka fillStyle, strokeStyle eller lineWidth
