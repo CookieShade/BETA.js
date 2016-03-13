@@ -1,7 +1,6 @@
 /*
   BETA.js - BEtter Than Advanced.js
   by Erik "CookieShade" Bivrin
-  Pre-release build 20/7 - 2015
 
   Comments in english explain the code,
   comments in swedish are the dev's notes to himself
@@ -11,40 +10,40 @@
     "use strict";
     window.BETA = {};
 
-    //Gör eventuellt samma omvandling som med vektorerna,
-    //dvs. ha inte en konstruktor
-    //Testa om man inte behöver köra colorInst.toString i canvas-funktioner
-    BETA.Color = function (red, green, blue, alpha) {
-        this.r = red;
-        this.g = green;
-        this.b = blue;
-        this.a = (typeof alpha !== "undefined") ? alpha : 1;
+    BETA.colorProto = {
+        toString: function () {
+            return (this.a >= 1) ?
+                "rgb(" + this.r + "," + this.g + "," + this.b + ")" :
+                "rgba(" + this.r + "," + this.g + "," + this.b + "," + this.a + ")";
+        }
     };
 
-    BETA.Color.prototype.toString = function () {
-        return (this.a >= 1) ?
-          "rgb(" + this.r + "," + this.g + "," + this.b + ")" :
-          "rgba(" + this.r + "," + this.g + "," + this.b + "," + this.a + ")";
+    BETA.rgba = function (red, green, blue, alpha) {
+        var color = Object.create(BETA.colorProto);
+        color.r = red;
+        color.g = green;
+        color.b = blue;
+        color.a = (alpha !== undefined) ? alpha : 1;
     };
 
     //------------VECTOR FUNCTIONS------------\\
 
+    BETA.vProto = {
+        toString: function ()
+        {
+            return BETA.vStringify(this);
+        }
+    };
+
     BETA.vector = function (x, y) {
-        //Vectors inherit .toString() from vProt
-        var v = Object.create(vProt);
+        //Vectors inherit .toString() from vProto
+        var v = Object.create(BETA.vProto);
         v.x = x;
         v.y = y;
         return v;
     };
 
     BETA.v = BETA.vector;
-
-    //Makes vectors created from BETA.vector()/v() autoconvert to strings
-    //via BETA.vStringify() instead of the default "[object Object]".
-    var vProt = {};
-    vProt.toString = function () {
-        return vStringify(this);
-    };
 
     BETA.vStringify = function (v) {
         return "(" + v.x + ", " + v.y + ")";
@@ -84,16 +83,13 @@
 
     //------------CANVAS INTERFACE------------\\
 
-
-    //Fixa .context inför release
     BETA.Canvas = function (id) {
         var cvs = document.getElementById(id);
         var ctx = cvs.getContext("2d");
 
         this.id = id;
         this.canvas = cvs;
-        //this.context = ctx;
-        this.context = cvs.getContext("2d");
+        this.context = ctx;
         this.width = cvs.width;
         this.height = cvs.height;
         this.sizeVector = BETA.v(cvs.width, cvs.height);
