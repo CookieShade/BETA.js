@@ -27,6 +27,7 @@
         color.g = green;
         color.b = blue;
         color.a = (alpha !== undefined) ? alpha : 1;
+        return color;
     };
 
     //------------VECTOR FUNCTIONS------------\\
