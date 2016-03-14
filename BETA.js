@@ -22,13 +22,25 @@
         }
     };
 
+    BETA.rgbChannelConform = function (val)
+    {
+        return Math.max(0, Math.min(255, Math.round(val)));
+    }
+
+    BETA.zeroOneClamp = function (val)
+    {
+        return Math.max(0, Math.min(1, val));
+    }
+
     BETA.rgba = function (red, green, blue, alpha)
     {
+        alpha = (alpha !== undefined) ? alpha : 1;
+
         var color = Object.create(BETA.colorProto);
-        color.r = red;
-        color.g = green;
-        color.b = blue;
-        color.a = (alpha !== undefined) ? alpha : 1;
+        color.r = BETA.rgbChannelConform(red);
+        color.g = BETA.rgbChannelConform(green);
+        color.b = BETA.rgbChannelConform(blue);
+        color.a = BETA.zeroOneClamp(alpha);
         return color;
     }
 
@@ -51,6 +63,10 @@
 
     BETA.hsla = function (h, s, l, a)
     {
+        h = BETA.zeroOneClamp(h);
+        s = BETA.zeroOneClamp(s);
+        l = BETA.zeroOneClamp(l);
+        a = BETA.zeroOneClamp(a);
         var r;
         var g;
         var b;
@@ -79,6 +95,10 @@
 
     BETA.hsva = function (h, s, v, a)
     {
+        h = BETA.zeroOneClamp(h);
+        s = BETA.zeroOneClamp(s);
+        v = BETA.zeroOneClamp(v);
+        a = BETA.zeroOneClamp(a);
         var r;
         var g;
         var b;
