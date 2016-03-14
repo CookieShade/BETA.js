@@ -11,6 +11,22 @@
     "use strict";
     window.BETA = {};
 
+    BETA.assert = function (assertion, message)
+    {
+        if (!assertion)
+        {
+            var msg = (message) ?
+                "Assertion failed: " + message :
+                "Assertion failed.";
+            throw new Error(msg);
+        }
+    }
+
+    BETA.isNumber = function (val)
+    {
+        return (typeof val === "number" && !isNaN(val));
+    }
+
     //------------COLOR FUNCTIONS-----------\\
 
     BETA.colorProto = {
