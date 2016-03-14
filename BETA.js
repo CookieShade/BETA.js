@@ -11,6 +11,8 @@
     "use strict";
     window.BETA = {};
 
+    //------------COLOR FUNCTIONS-----------\\
+
     BETA.colorProto = {
         toString: function ()
         {
@@ -35,7 +37,75 @@
         return BETA.rgba(red, green, blue, 1);
     }
 
+    //HSL and HSV conversions made by GitHub user mjackson
+    //https://gist.github.com/mjackson/5311256
+    BETA.hueToRgbChannel = function (p, q, t)
+    {
+        if (t < 0) t += 1;
+        if (t > 1) t -= 1;
+        if (t < 1 / 6) return p + (q - p) * 6 * t;
+        if (t < 1 / 2) return q;
+        if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+        return p * 255;
+    }
 
+    BETA.hsla = function (h, s, l, a)
+    {
+        var r;
+        var g;
+        var b;
+
+        if (s == 0)
+        {
+            r = g = b = l; // achromatic
+        }
+        else
+        {
+            var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+            var p = 2 * l - q;
+
+            r = BETA.hueToRgbChannel(p, q, h + 1 / 3);
+            g = BETA.hueToRgbChannel(p, q, h);
+            b = BETA.hueToRgbChannel(p, q, h - 1 / 3);
+        }
+
+        return BETA.rgba(r, g, b, a);
+    }
+
+    BETA.hsl = function (h, s, l)
+    {
+        return BETA.hsla(h, s, l, 1);
+    }
+
+    BETA.hsva = function (h, s, v, a)
+    {
+        var r;
+        var g;
+        var b;
+
+        var i = Math.floor(h * 6);
+        var f = h * 6 - i;
+        var p = v * (1 - s);
+        var q = v * (1 - f * s);
+        var t = v * (1 - (1 - f) * s);
+
+        switch (i % 6)
+        {
+            case 0: r = v, g = t, b = p; break;
+            case 1: r = q, g = v, b = p; break;
+            case 2: r = p, g = v, b = t; break;
+            case 3: r = p, g = q, b = v; break;
+            case 4: r = t, g = p, b = v; break;
+            case 5: r = v, g = p, b = q; break;
+        }
+
+        return BETA.rgba(r * 255, b * 255, c * 255, a);
+    }
+
+    BETA.hsv = function (h, s, v)
+    {
+        return BETA.hsva(h, s, v, 1);
+    }
 
     //------------VECTOR FUNCTIONS------------\\
 
