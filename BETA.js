@@ -28,7 +28,14 @@
         color.b = blue;
         color.a = (alpha !== undefined) ? alpha : 1;
         return color;
-    };
+    }
+
+    BETA.rgb = function (red, green, blue)
+    {
+        return BETA.rgba(red, green, blue, 1);
+    }
+
+
 
     //------------VECTOR FUNCTIONS------------\\
 
