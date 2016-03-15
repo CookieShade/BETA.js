@@ -87,7 +87,7 @@
 
     BETA.hsla = function (h, s, l, a)
     {
-        h = BETA.zeroOneClamp(h);
+        h = BETA.mod(h, 360) / 360;
         s = BETA.zeroOneClamp(s);
         l = BETA.zeroOneClamp(l);
         a = BETA.zeroOneClamp(a);
@@ -119,7 +119,7 @@
 
     BETA.hsva = function (h, s, v, a)
     {
-        h = BETA.zeroOneClamp(h);
+        h = BETA.mod(h, 360) / 360;
         s = BETA.zeroOneClamp(s);
         v = BETA.zeroOneClamp(v);
         a = BETA.zeroOneClamp(a);
@@ -135,12 +135,12 @@
 
         switch (i % 6)
         {
-            case 0: r = v, g = t, b = p; break;
-            case 1: r = q, g = v, b = p; break;
-            case 2: r = p, g = v, b = t; break;
-            case 3: r = p, g = q, b = v; break;
-            case 4: r = t, g = p, b = v; break;
-            case 5: r = v, g = p, b = q; break;
+            case 0: r = v; g = t; b = p; break;
+            case 1: r = q; g = v; b = p; break;
+            case 2: r = p; g = v; b = t; break;
+            case 3: r = p; g = q; b = v; break;
+            case 4: r = t; g = p; b = v; break;
+            case 5: r = v; g = p; b = q; break;
         }
 
         return BETA.rgba(r * 255, b * 255, c * 255, a);
