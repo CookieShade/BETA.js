@@ -27,6 +27,14 @@
         return (typeof val === "number" && !isNaN(val));
     }
 
+    BETA.mod = function (x, y)
+    {
+        var r = x % y;
+        return r < 0 ?
+            r + y :
+            r + 0; //adding +0 ensures no negative zeroes
+    }
+
     //------------COLOR FUNCTIONS-----------\\
 
     BETA.colorProto = {
