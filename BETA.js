@@ -77,12 +77,15 @@
     //https://gist.github.com/mjackson/5311256
     BETA.hueToRgbChannel = function (p, q, t)
     {
-        if (t < 0) t += 1;
-        if (t > 1) t -= 1;
-        if (t < 1 / 6) return p + (q - p) * 6 * t;
-        if (t < 1 / 2) return q;
-        if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-        return p * 255;
+        var ret;
+        if (t < 0) { t += 1; }
+        if (t > 1) { t -= 1; }
+
+        if (t < 1 / 6) { ret = (p + (q - p) * 6 * t); }
+        else if (t < 1 / 2) { ret = q; }
+        else if (t < 2 / 3) { ret = (p + (q - p) * (2 / 3 - t) * 6); }
+        else { ret = p; }
+        return ret * 255;
     }
 
     BETA.hsla = function (hue, saturation, lightness, alpha)
@@ -143,7 +146,7 @@
             case 5: r = value; g = p; b = q; break;
         }
 
-        return BETA.rgba(r * 255, b * 255, c * 255, alpha);
+        return BETA.rgba(r * 255, b * 255, g * 255, alpha);
     }
 
     BETA.hsv = function (hue, saturation, value)
