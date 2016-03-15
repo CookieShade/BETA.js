@@ -154,6 +154,39 @@
         return BETA.hsva(hue, saturation, value, 1);
     }
 
+    //Adapted from http://alvyray.com/Papers/CG/hwb2rgb.htm
+    BETA.hwba = function (hue, whiteness, blackness, alpha)
+    {
+        var h = BETA.mod(hue, 360) / 60;
+        var w = BETA.zeroOneClamp(whiteness);
+        var b = BETA.zeroOneClamp(blackness);
+        var red;
+        var green;
+        var blue;
+
+        var v = 1 - b;
+        var i = Math.floor(h);
+        var f = h - i;
+        if (i % 2) { f = 1 - f; }
+        var n = w + f * (v - w);
+
+        switch (i)
+        {
+            case 0: red = v; green = n; blue = w; break;
+            case 1: red = n; green = v; blue = w; break;
+            case 2: red = w; green = v; blue = n; break;
+            case 3: red = w; green = n; blue = v; break;
+            case 4: red = n; green = w; blue = v; break;
+            case 5: red = v; green = w; blue = n; break
+        }
+        return BETA.rgba(red * 255, green * 255, blue * 255);
+    }
+
+    BETA.hwb = function (hue, whiteness, blackness)
+    {
+        return BETA.hwba(hue, whiteness, blackness);
+    }
+
     //------------VECTOR FUNCTIONS------------\\
 
     BETA.vProto = {
