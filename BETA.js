@@ -73,7 +73,7 @@
         return BETA.rgba(red, green, blue, 1);
     }
 
-    //HSL and HSV conversions made by GitHub user mjackson
+    //HSL conversion made by GitHub user mjackson
     //https://gist.github.com/mjackson/5311256
     BETA.hueToRgbChannel = function (p, q, t)
     {
@@ -120,32 +120,33 @@
         return BETA.hsla(hue, saturation, lightness, 1);
     }
 
+    //Adapted from http://alvyray.com/Papers/CG/hsv2rgb.htm
     BETA.hsva = function (hue, saturation, value, alpha)
     {
-        hue = BETA.mod(hue, 360) / 360;
-        saturation = BETA.zeroOneClamp(saturation);
-        value = BETA.zeroOneClamp(value);
-        var r;
-        var g;
-        var b;
+        var h = BETA.mod(hue, 360) / 60;
+        var s = BETA.zeroOneClamp(saturation);
+        var v = BETA.zeroOneClamp(value);
+        var red;
+        var green;
+        var blue;
 
-        var i = Math.floor(hue * 6);
-        var f = hue * 6 - i;
-        var p = value * (1 - saturation);
-        var q = value * (1 - f * saturation);
-        var t = value * (1 - (1 - f) * saturation);
+        var i = Math.floor(h);
+        var f = h - i;
+        if (i % 2 === 0) { f = 1 - f; }
+        var m = v * (1 - s);
+        var n = v * (1 - s * f);
 
-        switch (i % 6)
+        switch (i)
         {
-            case 0: r = value; g = t; b = p; break;
-            case 1: r = q; g = value; b = p; break;
-            case 2: r = p; g = value; b = t; break;
-            case 3: r = p; g = q; b = value; break;
-            case 4: r = t; g = p; b = value; break;
-            case 5: r = value; g = p; b = q; break;
+            case 0: red = v; green = n; blue = m; break;
+            case 1: red = n; green = v; blue = m; break;
+            case 2: red = m; green = v; blue = n; break;
+            case 3: red = m; green = n; blue = v; break;
+            case 4: red = n; green = m; blue = v; break;
+            case 5: red = v; green = m; blue = n; break;
         }
 
-        return BETA.rgba(r * 255, b * 255, g * 255, alpha);
+        return BETA.rgba(red * 255, green * 255, blue * 255, alpha);
     }
 
     BETA.hsv = function (hue, saturation, value)
