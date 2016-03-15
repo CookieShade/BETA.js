@@ -125,7 +125,6 @@
         hue = BETA.mod(hue, 360) / 360;
         saturation = BETA.zeroOneClamp(saturation);
         value = BETA.zeroOneClamp(value);
-        alpha = BETA.zeroOneClamp(alpha);
         var r;
         var g;
         var b;
