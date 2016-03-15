@@ -85,70 +85,70 @@
         return p * 255;
     }
 
-    BETA.hsla = function (h, s, l, a)
+    BETA.hsla = function (hue, saturation, lightness, alpha)
     {
-        h = BETA.mod(h, 360) / 360;
-        s = BETA.zeroOneClamp(s);
-        l = BETA.zeroOneClamp(l);
-        a = BETA.zeroOneClamp(a);
+        hue = BETA.mod(hue, 360) / 360;
+        saturation = BETA.zeroOneClamp(saturation);
+        lightness = BETA.zeroOneClamp(lightness);
+        alpha = BETA.zeroOneClamp(alpha);
         var r;
         var g;
         var b;
 
-        if (s == 0)
+        if (saturation == 0)
         {
-            r = g = b = l; // achromatic
+            r = g = b = lightness; // achromatic
         }
         else
         {
-            var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-            var p = 2 * l - q;
+            var q = lightness < 0.5 ? lightness * (1 + saturation) : lightness + saturation - lightness * saturation;
+            var p = 2 * lightness - q;
 
-            r = BETA.hueToRgbChannel(p, q, h + 1 / 3);
-            g = BETA.hueToRgbChannel(p, q, h);
-            b = BETA.hueToRgbChannel(p, q, h - 1 / 3);
+            r = BETA.hueToRgbChannel(p, q, hue + 1 / 3);
+            g = BETA.hueToRgbChannel(p, q, hue);
+            b = BETA.hueToRgbChannel(p, q, hue - 1 / 3);
         }
 
-        return BETA.rgba(r, g, b, a);
+        return BETA.rgba(r, g, b, alpha);
     }
 
-    BETA.hsl = function (h, s, l)
+    BETA.hsl = function (hue, saturation, lightness)
     {
-        return BETA.hsla(h, s, l, 1);
+        return BETA.hsla(hue, saturation, lightness, 1);
     }
 
-    BETA.hsva = function (h, s, v, a)
+    BETA.hsva = function (hue, saturation, value, alpha)
     {
-        h = BETA.mod(h, 360) / 360;
-        s = BETA.zeroOneClamp(s);
-        v = BETA.zeroOneClamp(v);
-        a = BETA.zeroOneClamp(a);
+        hue = BETA.mod(hue, 360) / 360;
+        saturation = BETA.zeroOneClamp(saturation);
+        value = BETA.zeroOneClamp(value);
+        alpha = BETA.zeroOneClamp(alpha);
         var r;
         var g;
         var b;
 
-        var i = Math.floor(h * 6);
-        var f = h * 6 - i;
-        var p = v * (1 - s);
-        var q = v * (1 - f * s);
-        var t = v * (1 - (1 - f) * s);
+        var i = Math.floor(hue * 6);
+        var f = hue * 6 - i;
+        var p = value * (1 - saturation);
+        var q = value * (1 - f * saturation);
+        var t = value * (1 - (1 - f) * saturation);
 
         switch (i % 6)
         {
-            case 0: r = v; g = t; b = p; break;
-            case 1: r = q; g = v; b = p; break;
-            case 2: r = p; g = v; b = t; break;
-            case 3: r = p; g = q; b = v; break;
-            case 4: r = t; g = p; b = v; break;
-            case 5: r = v; g = p; b = q; break;
+            case 0: r = value; g = t; b = p; break;
+            case 1: r = q; g = value; b = p; break;
+            case 2: r = p; g = value; b = t; break;
+            case 3: r = p; g = q; b = value; break;
+            case 4: r = t; g = p; b = value; break;
+            case 5: r = value; g = p; b = q; break;
         }
 
-        return BETA.rgba(r * 255, b * 255, c * 255, a);
+        return BETA.rgba(r * 255, b * 255, c * 255, alpha);
     }
 
-    BETA.hsv = function (h, s, v)
+    BETA.hsv = function (hue, saturation, value)
     {
-        return BETA.hsva(h, s, v, 1);
+        return BETA.hsva(hue, saturation, value, 1);
     }
 
     //------------VECTOR FUNCTIONS------------\\
