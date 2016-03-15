@@ -34,6 +34,14 @@
             r + y :
             r + 0; //adding +0 ensures no negative zeroes
     }
+    
+    //Clamps val to the range [a, b]
+    BETA.clamp(val, a, b)
+    {
+        return a < b ?
+            Math.max(a, Math.min(b, val)) :
+            Math.max(b, Math.min(a, val));
+    }
 
     //------------COLOR FUNCTIONS-----------\\
 
@@ -51,11 +59,6 @@
         return Math.max(0, Math.min(255, Math.round(val)));
     }
 
-    BETA.zeroOneClamp = function (val)
-    {
-        return Math.max(0, Math.min(1, val));
-    }
-
     BETA.rgba = function (red, green, blue, alpha)
     {
         alpha = (alpha !== undefined) ? alpha : 1;
@@ -64,7 +67,7 @@
         color.r = BETA.rgbChannelConform(red);
         color.g = BETA.rgbChannelConform(green);
         color.b = BETA.rgbChannelConform(blue);
-        color.a = BETA.zeroOneClamp(alpha);
+        color.a = BETA.clamp(alpha, 0, 1);
         return color;
     }
 
@@ -91,9 +94,9 @@
     BETA.hsla = function (hue, saturation, lightness, alpha)
     {
         hue = BETA.mod(hue, 360) / 360;
-        saturation = BETA.zeroOneClamp(saturation);
-        lightness = BETA.zeroOneClamp(lightness);
-        alpha = BETA.zeroOneClamp(alpha);
+        saturation = BETA.clamp(saturation, 0, 1);
+        lightness = BETA.clamp(lightness, 0, 1);
+        alpha = BETA.clamp(alpha, 0, 1);
         var r;
         var g;
         var b;
@@ -124,8 +127,8 @@
     BETA.hsva = function (hue, saturation, value, alpha)
     {
         var h = BETA.mod(hue, 360) / 60;
-        var s = BETA.zeroOneClamp(saturation);
-        var v = BETA.zeroOneClamp(value);
+        var s = BETA.clamp(saturation, 0, 1);
+        var v = BETA.clamp(value, 0, 1);
         var red;
         var green;
         var blue;
@@ -145,7 +148,6 @@
             case 4: red = n; green = m; blue = v; break;
             case 5: red = v; green = m; blue = n; break;
         }
-
         return BETA.rgba(red * 255, green * 255, blue * 255, alpha);
     }
 
@@ -158,8 +160,8 @@
     BETA.hwba = function (hue, whiteness, blackness, alpha)
     {
         var h = BETA.mod(hue, 360) / 60;
-        var w = BETA.zeroOneClamp(whiteness);
-        var b = BETA.zeroOneClamp(blackness);
+        var w = BETA.clamp(whiteness, 0, 1);
+        var b = BETA.clamp(blackness, 0, 1);
         var red;
         var green;
         var blue;
