@@ -168,7 +168,7 @@
         var v = 1 - b;
         var i = Math.floor(h);
         var f = h - i;
-        if (i % 2) { f = 1 - f; }
+        if (i % 2) {f = 1 - f;}
         var n = w + f * (v - w);
 
         switch (i)
@@ -178,14 +178,14 @@
             case 2: red = w; green = v; blue = n; break;
             case 3: red = w; green = n; blue = v; break;
             case 4: red = n; green = w; blue = v; break;
-            case 5: red = v; green = w; blue = n; break
+            case 5: red = v; green = w; blue = n; break;
         }
-        return BETA.rgba(red * 255, green * 255, blue * 255);
+        return BETA.rgba(red * 255, green * 255, blue * 255, alpha);
     }
 
     BETA.hwb = function (hue, whiteness, blackness)
     {
-        return BETA.hwba(hue, whiteness, blackness);
+        return BETA.hwba(hue, whiteness, blackness, 1);
     }
 
     //------------VECTOR FUNCTIONS------------\\
