@@ -36,7 +36,7 @@
     }
     
     //Clamps val to the range [a, b]
-    BETA.clamp(val, a, b)
+    BETA.clamp = function (val, a, b)
     {
         return a < b ?
             Math.max(a, Math.min(b, val)) :
@@ -96,7 +96,6 @@
         hue = BETA.mod(hue, 360) / 360;
         saturation = BETA.clamp(saturation, 0, 1);
         lightness = BETA.clamp(lightness, 0, 1);
-        alpha = BETA.clamp(alpha, 0, 1);
         var r;
         var g;
         var b;
