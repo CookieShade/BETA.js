@@ -93,25 +93,25 @@
 
     BETA.hsla = function (hue, saturation, lightness, alpha)
     {
-        hue = BETA.mod(hue, 360) / 360;
-        saturation = BETA.clamp(saturation, 0, 1);
-        lightness = BETA.clamp(lightness, 0, 1);
+        var h = BETA.mod(hue, 360) / 360;
+        var s = BETA.clamp(saturation / 100, 0, 1);
+        var l = BETA.clamp(lightness / 100, 0, 1);
         var r;
         var g;
         var b;
 
         if (saturation == 0)
         {
-            r = g = b = lightness; // achromatic
+            r = g = b = l; // achromatic
         }
         else
         {
-            var q = lightness < 0.5 ? lightness * (1 + saturation) : lightness + saturation - lightness * saturation;
-            var p = 2 * lightness - q;
+            var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+            var p = 2 * l - q;
 
-            r = BETA.hueToRgbChannel(p, q, hue + 1 / 3);
-            g = BETA.hueToRgbChannel(p, q, hue);
-            b = BETA.hueToRgbChannel(p, q, hue - 1 / 3);
+            r = BETA.hueToRgbChannel(p, q, h + 1 / 3);
+            g = BETA.hueToRgbChannel(p, q, h);
+            b = BETA.hueToRgbChannel(p, q, h - 1 / 3);
         }
 
         return BETA.rgba(r, g, b, alpha);
@@ -126,8 +126,8 @@
     BETA.hsva = function (hue, saturation, value, alpha)
     {
         var h = BETA.mod(hue, 360) / 60;
-        var s = BETA.clamp(saturation, 0, 1);
-        var v = BETA.clamp(value, 0, 1);
+        var s = BETA.clamp(saturation / 100, 0, 1);
+        var v = BETA.clamp(value / 100, 0, 1);
         var red;
         var green;
         var blue;
@@ -159,8 +159,8 @@
     BETA.hwba = function (hue, whiteness, blackness, alpha)
     {
         var h = BETA.mod(hue, 360) / 60;
-        var w = Math.max(0, whiteness);
-        var b = Math.max(0, blackness);
+        var w = Math.max(0, whiteness / 100);
+        var b = Math.max(0, blackness / 100);
         var sum = w + b;
         if (sum > 1) { w = w / sum; b = b / sum; }
 
