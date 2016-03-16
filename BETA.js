@@ -159,8 +159,11 @@
     BETA.hwba = function (hue, whiteness, blackness, alpha)
     {
         var h = BETA.mod(hue, 360) / 60;
-        var w = BETA.clamp(whiteness, 0, 1);
-        var b = BETA.clamp(blackness, 0, 1);
+        var w = Math.max(0, whiteness);
+        var b = Math.max(0, blackness);
+        var sum = w + b;
+        if (sum > 1) { w = w / sum; b = b / sum; }
+
         var red;
         var green;
         var blue;
