@@ -49,8 +49,8 @@
         toString: function ()
         {
             return (this.a >= 1) ?
-                "rgb(" + this.r + "," + this.g + "," + this.b + ")" :
-                "rgba(" + this.r + "," + this.g + "," + this.b + "," + this.a + ")";
+                "rgb(" + this.r + ", " + this.g + ", " + this.b + ")" :
+                "rgba(" + this.r + ", " + this.g + ", " + this.b + ", " + this.a + ")";
         }
     };
 
