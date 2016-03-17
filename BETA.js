@@ -102,7 +102,7 @@
 
         if (saturation == 0)
         {
-            r = g = b = l; // achromatic
+            r = g = b = (l * 255); // achromatic
         }
         else
         {
