@@ -207,54 +207,94 @@
         v.x = x;
         v.y = y;
         return v;
-    };
+    }
 
     BETA.v = BETA.vector;
 
     BETA.vStringify = function (v)
     {
         return "(" + v.x + ", " + v.y + ")";
-    };
+    }
 
     BETA.vAdd = function (v1, v2)
     {
         return BETA.v(v1.x + v2.x, v1.y + v2.y);
-    };
+    }
 
     BETA.vSubtract = function (v1, v2)
     {
         return BETA.v(v1.x - v2.x, v1.y - v2.y);
-    };
+    }
 
     BETA.vScale = function (v1, v2)
     {
         return BETA.v(v1.x * v2.x, v1.y * v2.y);
-    };
+    }
 
     BETA.vDot = function (v1, v2)
     {
         return v1.x * v2.x + v1.y * v2.y;
-    };
+    }
 
     BETA.vScalarMult = function (v, s)
     {
         return BETA.v(v.x * s, v.y * s);
-    };
+    }
 
     BETA.vScalarDiv = function (v, s)
     {
         return BETA.v(v.x / s, v.y / s);
-    };
+    }
 
     BETA.vMagnitude = function (v)
     {
         return Math.sqrt(v.x * v.x + v.y * v.y);
-    };
+    }
 
     BETA.vNormalize = function (v)
     {
         return (v.x === 0 && v.y === 0) ? v : BETA.vScalarDiv(v, BETA.vMagnitude(v));
-    };
+    }
+
+    //------------IMAGE FUNCTIONS-------------\\
+
+    BETA.images = [];
+
+    var loadingImgs = 0;
+
+    BETA.loadImage = function (url)
+    {
+        loadingImgs++;
+        var img = document.createElement("img");
+        img.onload = function ()
+        {
+            BETA.assert(img.naturalWidth > 0, "Image is broken, URL: " + url);
+            loadingImgs--;
+            if (loadingImgs === 0 && typeof onAllLoaded === "function")
+            {
+                onAllLoaded();
+                onAllLoaded = null;
+            }
+        }
+        img.src = url;
+        BETA.images.push(img);
+
+        return img;
+    }
+
+    var onAllLoaded = null;
+
+    BETA.waitForImgLoad(callback)
+    {
+        if (loadingImgs === 0)
+        {
+            callback();
+        }
+        else
+        {
+            onAllLoaded = callback;
+        }
+    }
 
     //------------CANVAS INTERFACE------------\\
 
