@@ -284,7 +284,7 @@
 
     var onAllLoaded = null;
 
-    BETA.waitForImgLoad(callback)
+    BETA.waitForImgLoad = function (callback)
     {
         if (loadingImgs === 0)
         {
@@ -309,7 +309,7 @@
         this.width = cvs.width;
         this.height = cvs.height;
         this.sizeVector = BETA.v(cvs.width, cvs.height);
-    };
+    }
 
     BETA.Canvas.prototype.resize = function (x, y)
     {
@@ -320,7 +320,7 @@
         this.canvas.height = y;
         this.canvas.style.width = x + "px";
         this.canvas.style.height = y + "px";
-    };
+    }
 
     BETA.Canvas.prototype.vectorResize = function (vector)
     {
@@ -331,7 +331,7 @@
         this.canvas.height = vector.y;
         this.canvas.style.width = vector.x + "px";
         this.canvas.style.height = vector.y + "px";
-    };
+    }
 
     BETA.Canvas.prototype.line = function (posA, posB, thickness, style)
     {
@@ -342,59 +342,71 @@
         this.context.lineTo(posB.x, posB.y);
         this.context.stroke();
         this.context.closePath();
-    };
+    }
 
     BETA.Canvas.prototype.rect = function (pos, size, style)
     {
         this.context.fillStyle = style;
         this.context.fillRect(pos.x, pos.y, size.x, size.y);
-    };
+    }
 
     BETA.Canvas.prototype.lineRect = function (pos, size, thickness, style)
     {
         this.context.strokeStyle = style;
         this.context.lineWidth = thickness;
         this.context.strokeRect(pos.x, pos.y, size.x, size.y);
-    };
+    }
+
+    BETA.Canvas.prototype.drawImage = function (img, pos, size)
+    {
+        if (size)
+        {
+            this.context.drawImage(img, pos.x, pos.y, size.x, size.y);
+        }
+        else
+        {
+            this.context.drawImage(img, pos.x, pos.y);
+        }
+    }
 
     BETA.Canvas.prototype.translate = function (x, y)
     {
         this.context.translate(x, y);
-    };
+    }
 
     BETA.Canvas.prototype.vectorTranslate = function (vector)
     {
         this.context.translate(vector.x, vector.y);
-    };
+    }
 
     BETA.Canvas.prototype.scale = function (x, y)
     {
         this.context.scale(x, y);
-    };
+    }
 
     BETA.Canvas.prototype.vectorScale = function (vector)
     {
         this.context.scale(vector.x, vector.y);
-    };
+    }
 
     BETA.Canvas.prototype.rotate = function (degrees)
     {
         this.context.rotate(degrees * Math.PI / 180);
-    };
+    }
 
     BETA.Canvas.prototype.rotateRad = function (radians)
     {
         this.context.rotate(radians);
-    };
+    }
 
     BETA.Canvas.prototype.save = function ()
     {
         this.context.save();
-    };
+    }
 
     BETA.Canvas.prototype.restore = function ()
     {
         this.context.restore();
-    };
+    }
 
 })();
