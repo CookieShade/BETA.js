@@ -20,12 +20,12 @@
                 "Assertion failed.";
             throw new Error(msg);
         }
-    }
+    };
 
     BETA.isNumber = function (val)
     {
         return (typeof val === "number" && !isNaN(val));
-    }
+    };
 
     BETA.mod = function (x, y)
     {
@@ -33,7 +33,7 @@
         return r < 0 ?
             r + y :
             r + 0; //adding +0 ensures no negative zeroes
-    }
+    };
     
     //Clamps val to the range [a, b]
     BETA.clamp = function (val, a, b)
@@ -41,7 +41,7 @@
         return a < b ?
             Math.max(a, Math.min(b, val)) :
             Math.max(b, Math.min(a, val));
-    }
+    };
 
     //------------COLOR FUNCTIONS-----------\\
 
@@ -57,7 +57,7 @@
     BETA.rgbChannelConform = function (val)
     {
         return Math.max(0, Math.min(255, Math.round(val)));
-    }
+    };
 
     BETA.rgba = function (red, green, blue, alpha)
     {
@@ -69,12 +69,12 @@
         color.b = BETA.rgbChannelConform(blue);
         color.a = BETA.clamp(alpha, 0, 1);
         return color;
-    }
+    };
 
     BETA.rgb = function (red, green, blue)
     {
         return BETA.rgba(red, green, blue, 1);
-    }
+    };
 
     //HSL conversion made by GitHub user mjackson
     //https://gist.github.com/mjackson/5311256
@@ -89,7 +89,7 @@
         else if (t < 2 / 3) { ret = (p + (q - p) * (2 / 3 - t) * 6); }
         else { ret = p; }
         return ret * 255;
-    }
+    };
 
     BETA.hsla = function (hue, saturation, lightness, alpha)
     {
@@ -100,9 +100,12 @@
         var g;
         var b;
 
-        if (saturation == 0)
+        if (saturation === 0)
         {
-            r = g = b = (l * 255); // achromatic
+            var c = (l * 255);
+            r = c;
+            g = c;
+            b = c;
         }
         else
         {
@@ -115,12 +118,12 @@
         }
 
         return BETA.rgba(r, g, b, alpha);
-    }
+    };
 
     BETA.hsl = function (hue, saturation, lightness)
     {
         return BETA.hsla(hue, saturation, lightness, 1);
-    }
+    };
 
     //Adapted from http://alvyray.com/Papers/CG/hsv2rgb.htm
     BETA.hsva = function (hue, saturation, value, alpha)
@@ -148,12 +151,12 @@
             case 5: red = v; green = m; blue = n; break;
         }
         return BETA.rgba(red * 255, green * 255, blue * 255, alpha);
-    }
+    };
 
     BETA.hsv = function (hue, saturation, value)
     {
         return BETA.hsva(hue, saturation, value, 1);
-    }
+    };
 
     //Adapted from http://alvyray.com/Papers/CG/hwb2rgb.htm
     BETA.hwba = function (hue, whiteness, blackness, alpha)
@@ -171,7 +174,7 @@
         var v = 1 - b;
         var i = Math.floor(h);
         var f = h - i;
-        if (i % 2) {f = 1 - f;}
+        if (i % 2 === 1) { f = 1 - f; }
         var n = w + f * (v - w);
 
         switch (i)
@@ -184,12 +187,12 @@
             case 5: red = v; green = w; blue = n; break;
         }
         return BETA.rgba(red * 255, green * 255, blue * 255, alpha);
-    }
+    };
 
     BETA.hwb = function (hue, whiteness, blackness)
     {
         return BETA.hwba(hue, whiteness, blackness, 1);
-    }
+    };
 
     //------------VECTOR FUNCTIONS------------\\
 
@@ -207,54 +210,54 @@
         v.x = x;
         v.y = y;
         return v;
-    }
+    };
 
     BETA.v = BETA.vector;
 
     BETA.vStringify = function (v)
     {
         return "(" + v.x + ", " + v.y + ")";
-    }
+    };
 
     BETA.vAdd = function (v1, v2)
     {
         return BETA.v(v1.x + v2.x, v1.y + v2.y);
-    }
+    };
 
     BETA.vSubtract = function (v1, v2)
     {
         return BETA.v(v1.x - v2.x, v1.y - v2.y);
-    }
+    };
 
     BETA.vScale = function (v1, v2)
     {
         return BETA.v(v1.x * v2.x, v1.y * v2.y);
-    }
+    };
 
     BETA.vDot = function (v1, v2)
     {
         return v1.x * v2.x + v1.y * v2.y;
-    }
+    };
 
     BETA.vScalarMult = function (v, s)
     {
         return BETA.v(v.x * s, v.y * s);
-    }
+    };
 
     BETA.vScalarDiv = function (v, s)
     {
         return BETA.v(v.x / s, v.y / s);
-    }
+    };
 
     BETA.vMagnitude = function (v)
     {
         return Math.sqrt(v.x * v.x + v.y * v.y);
-    }
+    };
 
     BETA.vNormalize = function (v)
     {
         return (v.x === 0 && v.y === 0) ? v : BETA.vScalarDiv(v, BETA.vMagnitude(v));
-    }
+    };
 
     //------------IMAGE FUNCTIONS-------------\\
 
@@ -262,27 +265,27 @@
 
     var loadingImgs = 0;
 
+    var onAllLoaded = null;
+
     BETA.loadImage = function (url)
     {
-        loadingImgs++;
+        loadingImgs += 1;
         var img = document.createElement("img");
         img.onload = function ()
         {
             BETA.assert(img.naturalWidth > 0, "Image is broken, URL: " + url);
-            loadingImgs--;
+            loadingImgs -= 1;
             if (loadingImgs === 0 && typeof onAllLoaded === "function")
             {
                 onAllLoaded();
                 onAllLoaded = null;
             }
-        }
+        };
         img.src = url;
         BETA.images.push(img);
 
         return img;
-    }
-
-    var onAllLoaded = null;
+    };
 
     BETA.waitForImgLoad = function (callback)
     {
@@ -294,7 +297,7 @@
         {
             onAllLoaded = callback;
         }
-    }
+    };
 
     //------------CANVAS INTERFACE------------\\
 
@@ -309,7 +312,7 @@
         this.width = cvs.width;
         this.height = cvs.height;
         this.sizeVector = BETA.v(cvs.width, cvs.height);
-    }
+    };
 
     BETA.Canvas.prototype.resize = function (x, y)
     {
@@ -320,7 +323,7 @@
         this.canvas.height = y;
         this.canvas.style.width = x + "px";
         this.canvas.style.height = y + "px";
-    }
+    };
 
     BETA.Canvas.prototype.vectorResize = function (vector)
     {
@@ -331,7 +334,7 @@
         this.canvas.height = vector.y;
         this.canvas.style.width = vector.x + "px";
         this.canvas.style.height = vector.y + "px";
-    }
+    };
 
     BETA.Canvas.prototype.line = function (posA, posB, thickness, style)
     {
@@ -342,20 +345,20 @@
         this.context.lineTo(posB.x, posB.y);
         this.context.stroke();
         this.context.closePath();
-    }
+    };
 
     BETA.Canvas.prototype.rect = function (pos, size, style)
     {
         this.context.fillStyle = style;
         this.context.fillRect(pos.x, pos.y, size.x, size.y);
-    }
+    };
 
     BETA.Canvas.prototype.lineRect = function (pos, size, thickness, style)
     {
         this.context.strokeStyle = style;
         this.context.lineWidth = thickness;
         this.context.strokeRect(pos.x, pos.y, size.x, size.y);
-    }
+    };
 
     BETA.Canvas.prototype.drawImage = function (img, pos, size)
     {
@@ -367,46 +370,46 @@
         {
             this.context.drawImage(img, pos.x, pos.y);
         }
-    }
+    };
 
     BETA.Canvas.prototype.translate = function (x, y)
     {
         this.context.translate(x, y);
-    }
+    };
 
     BETA.Canvas.prototype.vectorTranslate = function (vector)
     {
         this.context.translate(vector.x, vector.y);
-    }
+    };
 
     BETA.Canvas.prototype.scale = function (x, y)
     {
         this.context.scale(x, y);
-    }
+    };
 
     BETA.Canvas.prototype.vectorScale = function (vector)
     {
         this.context.scale(vector.x, vector.y);
-    }
+    };
 
     BETA.Canvas.prototype.rotate = function (degrees)
     {
         this.context.rotate(degrees * Math.PI / 180);
-    }
+    };
 
     BETA.Canvas.prototype.rotateRad = function (radians)
     {
         this.context.rotate(radians);
-    }
+    };
 
     BETA.Canvas.prototype.save = function ()
     {
         this.context.save();
-    }
+    };
 
     BETA.Canvas.prototype.restore = function ()
     {
         this.context.restore();
-    }
+    };
 
-})();
+}());
