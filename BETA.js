@@ -412,4 +412,45 @@
         this.context.restore();
     };
 
+    //------------ANIMATION SYSTEM------------\\
+
+    var animations = {};
+
+    BETA.animate = function (callback)
+    {
+        var prevTime;
+        var frameId;
+        var animId;
+
+        var animationFn = function (time)
+        {
+            frameId = requestAnimationFrame(animationFn);
+            animations[animId] = frameId;
+
+            var deltaTime = prevTime ?
+                (time - prevTime) / 1000
+                : 0;
+
+            callback({ time: time, deltaTime: deltaTime });
+
+            prevTime = time;
+        };
+
+        animId = requestAnimationFrame(animationFn);
+        frameId = animId;
+
+        animations[animId] = frameId;
+
+        return animId;
+    };
+
+    BETA.stopAnimation = function (id)
+    {
+        BETA.assert(animations[id], "There is no animation with ID " + id);
+        var cancelId = animations[id];
+
+        cancelAnimationFrame(animations[id]);
+        delete animations[id];
+    };
+
 }());
