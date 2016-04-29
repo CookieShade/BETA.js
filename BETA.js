@@ -422,7 +422,7 @@
         var frameId;
         var animId;
 
-        var animationFn = function (time)
+        frameId = requestAnimationFrame(function animationFn(time)
         {
             frameId = requestAnimationFrame(animationFn);
             animations[animId] = frameId;
@@ -434,10 +434,9 @@
             callback({ time: time, deltaTime: deltaTime });
 
             prevTime = time;
-        };
+        });
 
-        animId = requestAnimationFrame(animationFn);
-        frameId = animId;
+        animId = frameId;
 
         animations[animId] = frameId;
 
@@ -447,7 +446,6 @@
     BETA.stopAnimation = function (id)
     {
         BETA.assert(animations[id], "There is no animation with ID " + id);
-        var cancelId = animations[id];
 
         cancelAnimationFrame(animations[id]);
         delete animations[id];
