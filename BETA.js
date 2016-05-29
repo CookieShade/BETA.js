@@ -349,10 +349,77 @@
         this.context.moveTo(posA.x, posA.y);
         this.context.lineTo(posB.x, posB.y);
         this.context.stroke();
-        this.context.closePath();
     };
 
-    canvasRendererProto.rect = function (pos, size, style)
+    canvasRendererProto.fillCircle = function (pos, radius, style)
+    {
+        this.context.fillStyle = style;
+        this.context.beginPath();
+        this.context.arc(pos.x, pos.y, radius, 0, Math.PI * 2, true);
+        this.context.fill();
+    };
+
+    canvasRendererProto.lineCircle = function (pos, radius, thickness, style)
+    {
+        this.context.strokeStyle = style;
+        this.context.lineWidth = thickness;
+        this.context.beginPath();
+        this.context.arc(pos.x, pos.y, radius, 0, Math.PI * 2, true);
+        this.context.stroke();
+    };
+
+    canvasRendererProto.fillSector = function (pos, radius, startAngle, endAngle, style)
+    {
+        var startRadians = startAngle * Math.PI / 180;
+        var endRadians = endAngle * Math.PI / 180;
+
+        //arcPointX/Y is where the arc starts, on the edge of the circle
+        var arcPointX = pos.x + Math.sin(startRadians) * radius;
+        var arcPointY = pos.y - Math.cos(startRadians) * radius;
+
+        this.context.fillStyle = style;
+
+        this.context.beginPath();
+        this.context.moveTo(pos.x, pos.y);
+        this.context.lineTo(arcPointX, arcPointY);
+        this.context.arc(pos.x, pos.y, radius, startRadians - Math.PI * 0.5, endRadians - Math.PI * 0.5, false);
+        this.context.fill();
+    };
+
+    canvasRendererProto.lineSector = function (pos, radius, startAngle, endAngle, thickness, style)
+    {
+        var startRadians = startAngle * Math.PI / 180;
+        var endRadians = endAngle * Math.PI / 180;
+
+        //arcPointX/Y is where the arc starts, on the edge of the circle
+        var arcPointX = pos.x + Math.sin(startRadians) * radius;
+        var arcPointY = pos.y - Math.cos(startRadians) * radius;
+
+        this.context.strokeStyle = style;
+        this.context.lineWidth = thickness;
+
+        this.context.beginPath();
+        this.context.moveTo(pos.x, pos.y);
+        this.context.lineTo(arcPointX, arcPointY);
+        this.context.arc(pos.x, pos.y, radius, startRadians - Math.PI * 0.5, endRadians - Math.PI * 0.5, false);
+        this.context.lineTo(pos.x, pos.y);
+        this.context.stroke();
+    }
+
+    canvasRendererProto.arc = function (pos, radius, startAngle, endAngle, thickness, style)
+    {
+        var startRadians = startAngle * (Math.PI / 180);
+        var endRadians = endAngle * (Math.PI / 180);
+
+        this.context.strokeStyle = style;
+        this.context.lineWidth = thickness;
+
+        this.context.beginPath();
+        this.context.arc(pos.x, pos.y, radius, startRadians - (Math.PI * 0.5), endRadians - (Math.PI * 0.5), false);
+        this.context.stroke();
+    };
+
+    canvasRendererProto.fillRect = function (pos, size, style)
     {
         this.context.fillStyle = style;
         this.context.fillRect(pos.x, pos.y, size.x, size.y);
@@ -363,6 +430,38 @@
         this.context.strokeStyle = style;
         this.context.lineWidth = thickness;
         this.context.strokeRect(pos.x, pos.y, size.x, size.y);
+    };
+
+    canvasRendererProto.fillPolygon = function (posArray, style)
+    {
+        this.context.fillStyle = style;
+        if (posArray.length > 1)
+        {
+            this.context.beginPath();
+            this.context.moveTo(posArray[0].x, posArray[0].y);
+            for (var i = 1; i < posArray.length; i++)
+            {
+                this.context.lineTo(posArray[i].x, posArray[i].y);
+            }
+            this.context.fill();
+        }
+    };
+
+    canvasRendererProto.linePolygon = function (posArray, thickness, style)
+    {
+        this.context.strokeStyle = style;
+        this.context.lineWidth = thickness;
+        if (posArray.length > 1)
+        {
+            this.context.beginPath();
+            this.context.moveTo(posArray[0].x, posArray[0].y);
+            for (var i = 1; i < posArray.length; i++)
+            {
+                this.context.lineTo(posArray[i].x, posArray[i].y);
+            }
+            this.context.closePath();
+            this.context.stroke();
+        }
     };
 
     canvasRendererProto.drawImage = function (img, pos, size)
