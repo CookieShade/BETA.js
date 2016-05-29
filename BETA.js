@@ -301,42 +301,47 @@
 
     //------------CANVAS INTERFACE------------\\
 
-    BETA.Canvas = function (id)
-    {
-        var cvs = document.getElementById(id);
-        var ctx = cvs.getContext("2d");
+    var canvasRendererProto = {};
 
-        this.id = id;
-        this.canvas = cvs;
-        this.context = ctx;
-        this.width = cvs.width;
-        this.height = cvs.height;
-        this.sizeVector = BETA.v(cvs.width, cvs.height);
+    BETA.getRenderer = function (id)
+    {
+        var canvas = document.getElementById(id);
+        var context = canvas.getContext("2d");
+
+        var renderer = Object.create(canvasRendererProto);
+        renderer.id = id;
+        renderer.canvas = canvas;
+        renderer.context = context;
+        renderer.width = canvas.width;
+        renderer.height = canvas.height;
+        renderer.size = BETA.v(canvas.width, canvas.height);
+
+        return renderer;
     };
 
-    BETA.Canvas.prototype.resize = function (x, y)
+    canvasRendererProto.resize = function (x, y)
     {
         this.width = x;
         this.height = y;
-        this.sizeVector = BETA.v(x, y);
+        this.size = BETA.v(x, y);
         this.canvas.width = x;
         this.canvas.height = y;
         this.canvas.style.width = x + "px";
         this.canvas.style.height = y + "px";
     };
 
-    BETA.Canvas.prototype.vectorResize = function (vector)
+    canvasRendererProto.vectorResize = function (vector)
     {
         this.width = vector.x;
         this.height = vector.y;
-        this.sizeVector = BETA.v(vector.x, vector.y);
+        this.size = BETA.v(vector.x, vector.y);
         this.canvas.width = vector.x;
         this.canvas.height = vector.y;
         this.canvas.style.width = vector.x + "px";
         this.canvas.style.height = vector.y + "px";
     };
 
-    BETA.Canvas.prototype.line = function (posA, posB, thickness, style)
+    canvasRendererProto.line = function (posA, posB, thickness, style)
     {
         this.context.strokeStyle = style;
         this.context.lineWidth = thickness;
@@ -344,23 +349,122 @@
         this.context.moveTo(posA.x, posA.y);
         this.context.lineTo(posB.x, posB.y);
         this.context.stroke();
-        this.context.closePath();
     };
 
-    BETA.Canvas.prototype.rect = function (pos, size, style)
+    canvasRendererProto.fillCircle = function (pos, radius, style)
+    {
+        this.context.fillStyle = style;
+        this.context.beginPath();
+        this.context.arc(pos.x, pos.y, radius, 0, Math.PI * 2, true);
+        this.context.fill();
+    };
+
+    canvasRendererProto.lineCircle = function (pos, radius, thickness, style)
+    {
+        this.context.strokeStyle = style;
+        this.context.lineWidth = thickness;
+        this.context.beginPath();
+        this.context.arc(pos.x, pos.y, radius, 0, Math.PI * 2, true);
+        this.context.stroke();
+    };
+
+    canvasRendererProto.fillSector = function (pos, radius, startAngle, endAngle, style)
+    {
+        var startRadians = startAngle * Math.PI / 180;
+        var endRadians = endAngle * Math.PI / 180;
+
+        //arcPointX/Y is where the arc starts, on the edge of the circle
+        var arcPointX = pos.x + Math.cos(startRadians) * radius;
+        var arcPointY = pos.y + Math.sin(startRadians) * radius;
+
+        this.context.fillStyle = style;
+
+        this.context.beginPath();
+        this.context.moveTo(pos.x, pos.y);
+        this.context.lineTo(arcPointX, arcPointY);
+        this.context.arc(pos.x, pos.y, radius, startRadians, endRadians);
+        this.context.fill();
+    };
+
+    canvasRendererProto.lineSector = function (pos, radius, startAngle, endAngle, thickness, style)
+    {
+        var startRadians = startAngle * Math.PI / 180;
+        var endRadians = endAngle * Math.PI / 180;
+
+        //arcPointX/Y is where the arc starts, on the edge of the circle
+        var arcPointX = pos.x + Math.cos(startRadians) * radius;
+        var arcPointY = pos.y + Math.sin(startRadians) * radius;
+
+        this.context.strokeStyle = style;
+        this.context.lineWidth = thickness;
+
+        this.context.beginPath();
+        this.context.moveTo(pos.x, pos.y);
+        this.context.lineTo(arcPointX, arcPointY);
+        this.context.arc(pos.x, pos.y, radius, startRadians, endRadians);
+        this.context.closePath();
+        this.context.stroke();
+    }
+
+    canvasRendererProto.arc = function (pos, radius, startAngle, endAngle, thickness, style)
+    {
+        var startRadians = startAngle * (Math.PI / 180);
+        var endRadians = endAngle * (Math.PI / 180);
+
+        this.context.strokeStyle = style;
+        this.context.lineWidth = thickness;
+
+        this.context.beginPath();
+        this.context.arc(pos.x, pos.y, radius, startRadians, endRadians, false);
+        this.context.stroke();
+    };
+
+    canvasRendererProto.fillRect = function (pos, size, style)
     {
         this.context.fillStyle = style;
         this.context.fillRect(pos.x, pos.y, size.x, size.y);
     };
 
-    BETA.Canvas.prototype.lineRect = function (pos, size, thickness, style)
+    canvasRendererProto.lineRect = function (pos, size, thickness, style)
     {
         this.context.strokeStyle = style;
         this.context.lineWidth = thickness;
         this.context.strokeRect(pos.x, pos.y, size.x, size.y);
     };
 
-    BETA.Canvas.prototype.drawImage = function (img, pos, size)
+    canvasRendererProto.fillPolygon = function (posArray, style)
+    {
+        this.context.fillStyle = style;
+        if (posArray.length > 1)
+        {
+            this.context.beginPath();
+            this.context.moveTo(posArray[0].x, posArray[0].y);
+            for (var i = 1; i < posArray.length; i++)
+            {
+                this.context.lineTo(posArray[i].x, posArray[i].y);
+            }
+            this.context.fill();
+        }
+    };
+
+    canvasRendererProto.linePolygon = function (posArray, thickness, style)
+    {
+        this.context.strokeStyle = style;
+        this.context.lineWidth = thickness;
+        if (posArray.length > 1)
+        {
+            this.context.beginPath();
+            this.context.moveTo(posArray[0].x, posArray[0].y);
+            for (var i = 1; i < posArray.length; i++)
+            {
+                this.context.lineTo(posArray[i].x, posArray[i].y);
+            }
+            this.context.closePath();
+            this.context.stroke();
+        }
+    };
+
+    canvasRendererProto.drawImage = function (img, pos, size)
     {
         if (size)
         {
@@ -372,42 +476,42 @@
         }
     };
 
-    BETA.Canvas.prototype.translate = function (x, y)
+    canvasRendererProto.translate = function (x, y)
     {
         this.context.translate(x, y);
     };
 
-    BETA.Canvas.prototype.vectorTranslate = function (vector)
+    canvasRendererProto.vectorTranslate = function (vector)
     {
         this.context.translate(vector.x, vector.y);
     };
 
-    BETA.Canvas.prototype.scale = function (x, y)
+    canvasRendererProto.scale = function (x, y)
     {
         this.context.scale(x, y);
     };
 
-    BETA.Canvas.prototype.vectorScale = function (vector)
+    canvasRendererProto.vectorScale = function (vector)
     {
         this.context.scale(vector.x, vector.y);
     };
 
-    BETA.Canvas.prototype.rotate = function (degrees)
+    canvasRendererProto.rotate = function (degrees)
     {
         this.context.rotate(degrees * Math.PI / 180);
     };
 
-    BETA.Canvas.prototype.rotateRad = function (radians)
+    canvasRendererProto.rotateRad = function (radians)
     {
         this.context.rotate(radians);
     };
 
-    BETA.Canvas.prototype.save = function ()
+    canvasRendererProto.save = function ()
     {
         this.context.save();
     };
 
-    BETA.Canvas.prototype.restore = function ()
+    canvasRendererProto.restore = function ()
     {
         this.context.restore();
     };
