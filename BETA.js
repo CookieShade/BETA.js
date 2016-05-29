@@ -374,15 +374,15 @@
         var endRadians = endAngle * Math.PI / 180;
 
         //arcPointX/Y is where the arc starts, on the edge of the circle
-        var arcPointX = pos.x + Math.sin(startRadians) * radius;
-        var arcPointY = pos.y - Math.cos(startRadians) * radius;
+        var arcPointX = pos.x + Math.cos(startRadians) * radius;
+        var arcPointY = pos.y + Math.sin(startRadians) * radius;
 
         this.context.fillStyle = style;
 
         this.context.beginPath();
         this.context.moveTo(pos.x, pos.y);
         this.context.lineTo(arcPointX, arcPointY);
-        this.context.arc(pos.x, pos.y, radius, startRadians - Math.PI * 0.5, endRadians - Math.PI * 0.5, false);
+        this.context.arc(pos.x, pos.y, radius, startRadians, endRadians);
         this.context.fill();
     };
 
@@ -392,8 +392,8 @@
         var endRadians = endAngle * Math.PI / 180;
 
         //arcPointX/Y is where the arc starts, on the edge of the circle
-        var arcPointX = pos.x + Math.sin(startRadians) * radius;
-        var arcPointY = pos.y - Math.cos(startRadians) * radius;
+        var arcPointX = pos.x + Math.cos(startRadians) * radius;
+        var arcPointY = pos.y + Math.sin(startRadians) * radius;
 
         this.context.strokeStyle = style;
         this.context.lineWidth = thickness;
@@ -401,8 +401,8 @@
         this.context.beginPath();
         this.context.moveTo(pos.x, pos.y);
         this.context.lineTo(arcPointX, arcPointY);
-        this.context.arc(pos.x, pos.y, radius, startRadians - Math.PI * 0.5, endRadians - Math.PI * 0.5, false);
-        this.context.lineTo(pos.x, pos.y);
+        this.context.arc(pos.x, pos.y, radius, startRadians, endRadians);
+        this.context.closePath();
         this.context.stroke();
     }
 
@@ -415,7 +415,7 @@
         this.context.lineWidth = thickness;
 
         this.context.beginPath();
-        this.context.arc(pos.x, pos.y, radius, startRadians - (Math.PI * 0.5), endRadians - (Math.PI * 0.5), false);
+        this.context.arc(pos.x, pos.y, radius, startRadians, endRadians, false);
         this.context.stroke();
     };
 
