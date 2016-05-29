@@ -314,7 +314,7 @@
         renderer.context = context;
         renderer.width = canvas.width;
         renderer.height = canvas.height;
-        renderer.sizeVector = BETA.v(canvas.width, canvas.height);
+        renderer.size = BETA.v(canvas.width, canvas.height);
 
         return renderer;
     };
@@ -323,7 +323,7 @@
     {
         this.width = x;
         this.height = y;
-        this.sizeVector = BETA.v(x, y);
+        this.size = BETA.v(x, y);
         this.canvas.width = x;
         this.canvas.height = y;
         this.canvas.style.width = x + "px";
@@ -334,7 +334,7 @@
     {
         this.width = vector.x;
         this.height = vector.y;
-        this.sizeVector = BETA.v(vector.x, vector.y);
+        this.size = BETA.v(vector.x, vector.y);
         this.canvas.width = vector.x;
         this.canvas.height = vector.y;
         this.canvas.style.width = vector.x + "px";
