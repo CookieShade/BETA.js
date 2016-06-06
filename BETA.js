@@ -555,4 +555,63 @@
         delete animations[id];
     };
 
+    //-------------INPUT HANDLING-------------\\
+
+    var keyCodes = {
+        a: 65, b: 66, c: 67, d: 68, e: 69, f: 70, g: 71, h: 72, i: 73, j: 74, k: 75, l: 76, m: 77,
+        n: 78, o: 79, p: 80, q: 81, r: 82, s: 83, t: 84, u: 85, v: 86, w: 87, x: 88, y: 89, z: 90,
+        num0: 48, num1: 49, num2: 50, num3: 51, num4: 52, num5: 53, num6: 54, num7: 55, num8: 56, num9: 57,
+        space: 32, enter: 13, tab: 9, esc: 27, backspace: 8, shift: 16, ctrl: 17, alt: 18,
+        capslock: 20, numlock: 144, left: 37, up: 38, right: 39, down: 40, insert: 45, del: 46,
+        f1: 112, f2: 113, f3: 114, f4: 115, f5: 116, f6: 117, f7: 118, f8: 119, f9: 120, f10: 121, f11: 122, f12: 123
+    };
+
+    var keyStatuses = {};
+
+    BETA.isKeyDown = function (key)
+    {
+        key = key.toLowerCase();
+        BETA.assert(keyCodes.hasOwnProperty(key), "isKeyDown(): Unknown key '" + key + "'");
+        return !!keyStatuses[keyCodes[key]];
+    };
+
+    var keyDownHandlers = {};
+
+    BETA.onKeyDown = function (key, callback)
+    {
+        key = key.toLowerCase();
+        BETA.assert(keyCodes.hasOwnProperty(key), "onKeyDown(): Unknown key '" + key + "'");
+        keyDownHandlers[keyCodes[key]] = callback;
+    };
+
+    document.addEventListener("keydown", function (event)
+    {
+        var kc = event.keyCode;
+        keyStatuses[kc] = true;
+        if (keyDownHandlers.hasOwnProperty(kc))
+        {
+            event.preventDefault();
+            keyDownHandlers[kc](event);
+        }
+    }, false);
+
+    var keyUpHandlers = {};
+
+    BETA.onKeyUp = function (key, callback)
+    {
+        key = key.toLowerCase();
+        BETA.assert(keyCodes.hasOwnProperty(key), "onKeyUp(): Unknown key '" + key + "'");
+        keyUpHandlers[keyCodes[key]] = callback;
+    }
+
+    document.addEventListener("keyup", function (event)
+    {
+        var kc = event.keyCode;
+        keyStatuses[kc] = false;
+        if (keyUpHandlers.hasOwnProperty(kc))
+        {
+            event.preventDefault();
+            keyUpHandlers[kc](event);
+        }
+    }, false);
 }());
