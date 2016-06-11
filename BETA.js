@@ -614,4 +614,20 @@
             keyUpHandlers[kc](event);
         }
     }, false);
+
+    var mousePos = { x: 0, y: 0 };
+
+    document.addEventListener("mousemove", function (event)
+    {
+        mousePos.x = event.clientX;
+        mousePos.y = event.clientY;
+    }, false);
+
+    canvasRendererProto.getMousePos = function (renderer)
+    {
+        var rect = renderer.canvas.getBoundingClientRect();
+        return v(
+            Math.round(mousePos.x - rect.left),
+            Math.round(mousePos.y - rect.top));
+    };
 }());
