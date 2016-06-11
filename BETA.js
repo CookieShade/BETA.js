@@ -404,7 +404,7 @@
         this.context.arc(pos.x, pos.y, radius, startRadians, endRadians);
         this.context.closePath();
         this.context.stroke();
-    }
+    };
 
     canvasRendererProto.arc = function (pos, radius, startAngle, endAngle, thickness, style)
     {
@@ -566,43 +566,91 @@
         f1: 112, f2: 113, f3: 114, f4: 115, f5: 116, f6: 117, f7: 118, f8: 119, f9: 120, f10: 121, f11: 122, f12: 123
     };
 
-    var keyStatuses = {};
+    var mouseBtns = {
+        mouse1: 0, mouse2: 2, mouse3: 1, mouse4: 3, mouse5: 4
+    };
 
-    BETA.isKeyDown = function (key)
+    var keyStatuses = {};
+    var mouseBtnStatuses = {};
+
+    BETA.isButtonDown = function (button)
     {
-        key = key.toLowerCase();
-        BETA.assert(keyCodes.hasOwnProperty(key), "isKeyDown(): Unknown key '" + key + "'");
-        return !!keyStatuses[keyCodes[key]];
+        var btn = button.toLowerCase();
+        if (keyCodes.hasOwnProperty(btn))
+        {
+            return !!keyStatuses[keyCodes[btn]];
+        }
+        else if (mouseBtns.hasOwnProperty(btn))
+        {
+            return !!mouseBtnStatuses[mouseBtns[btn]];
+        }
+        throw new Error("isButtonDown(): Unknown button '" + button + "'");
     };
 
     var keyDownHandlers = {};
+    var mouseDownHandlers = {};
 
-    BETA.onKeyDown = function (key, callback)
+    BETA.onButtonDown = function (button, callback)
     {
-        key = key.toLowerCase();
-        BETA.assert(keyCodes.hasOwnProperty(key), "onKeyDown(): Unknown key '" + key + "'");
-        keyDownHandlers[keyCodes[key]] = callback;
+        var btn = button.toLowerCase();
+        if (keyCodes.hasOwnProperty(btn))
+        {
+            keyDownHandlers[keyCodes[btn]] = callback;
+        }
+        else if (mouseBtns.hasOwnProperty(btn))
+        {
+            mouseDownHandlers[mouseBtns[btn]] = callback;
+        }
+        else
+        {
+            throw new Error("onButtonDown(): Unknown button '" + button + "'");
+        }
     };
 
     document.addEventListener("keydown", function (event)
     {
         var kc = event.keyCode;
-        keyStatuses[kc] = true;
-        if (keyDownHandlers.hasOwnProperty(kc))
+        if (!keyStatuses[kc]) //prevents repeat when button is held
+        {
+            keyStatuses[kc] = true;
+            if (keyDownHandlers.hasOwnProperty(kc))
+            {
+                event.preventDefault();
+                keyDownHandlers[kc](event);
+            }
+        }
+    }, false);
+
+    document.addEventListener("mousedown", function (event)
+    {
+        var btn = event.button;
+        mouseBtnStatuses[btn] = true;
+        if (mouseDownHandlers.hasOwnProperty(btn))
         {
             event.preventDefault();
-            keyDownHandlers[kc](event);
+            mouseDownHandlers[btn](event);
         }
     }, false);
 
     var keyUpHandlers = {};
+    var mouseUpHandlers = {};
 
-    BETA.onKeyUp = function (key, callback)
+    BETA.onButtonUp = function (button, callback)
     {
-        key = key.toLowerCase();
-        BETA.assert(keyCodes.hasOwnProperty(key), "onKeyUp(): Unknown key '" + key + "'");
-        keyUpHandlers[keyCodes[key]] = callback;
-    }
+        var btn = button.toLowerCase();
+        if (keyCodes.hasOwnProperty(btn))
+        {
+            keyUpHandlers[keyCodes[btn]] = callback;
+        }
+        else if (mouseBtns.hasOwnProperty(btn))
+        {
+            mouseUpHandlers[mouseBtns[btn]] = callback;
+        }
+        else
+        {
+            throw new Error("onButtonUp(): Unknown button '" + button + "'");
+        }
+    };
 
     document.addEventListener("keyup", function (event)
     {
@@ -615,6 +663,17 @@
         }
     }, false);
 
+    document.addEventListener("mouseup", function (event)
+    {
+        var btn = event.button;
+        mouseBtnStatuses[btn] = false;
+        if (mouseUpHandlers.hasOwnProperty(btn))
+        {
+            event.preventDefault();
+            mouseUpHandlers[btn](event);
+        }
+    }, false);
+
     var mousePos = { x: 0, y: 0 };
 
     document.addEventListener("mousemove", function (event)
@@ -623,10 +682,10 @@
         mousePos.y = event.clientY;
     }, false);
 
-    canvasRendererProto.getMousePos = function (renderer)
+    canvasRendererProto.getMousePos = function ()
     {
-        var rect = renderer.canvas.getBoundingClientRect();
-        return v(
+        var rect = this.canvas.getBoundingClientRect();
+        return BETA.v(
             Math.round(mousePos.x - rect.left),
             Math.round(mousePos.y - rect.top));
     };
