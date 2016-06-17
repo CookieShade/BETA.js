@@ -573,8 +573,77 @@
     var keyStatuses = {};
     var mouseBtnStatuses = {};
 
+    var keyDownHandlers = {};
+    var mouseDownHandlers = {};
+
+    var keyUpHandlers = {};
+    var mouseUpHandlers = {};
+
+    var mousePos = { x: 0, y: 0 };
+
+    var inputInitiated = false;
+
+    BETA.initInput = function ()
+    {
+        inputInitiated = true;
+
+        document.addEventListener("keydown", function (event)
+        {
+            var kc = event.keyCode;
+            if (!keyStatuses[kc]) //prevents repeat when button is held
+            {
+                keyStatuses[kc] = true;
+                if (keyDownHandlers.hasOwnProperty(kc))
+                {
+                    event.preventDefault();
+                    keyDownHandlers[kc](event);
+                }
+            }
+        }, false);
+
+        document.addEventListener("mousedown", function (event)
+        {
+            var btn = event.button;
+            mouseBtnStatuses[btn] = true;
+            if (mouseDownHandlers.hasOwnProperty(btn))
+            {
+                event.preventDefault();
+                mouseDownHandlers[btn](event);
+            }
+        }, false);
+
+        document.addEventListener("keyup", function (event)
+        {
+            var kc = event.keyCode;
+            keyStatuses[kc] = false;
+            if (keyUpHandlers.hasOwnProperty(kc))
+            {
+                event.preventDefault();
+                keyUpHandlers[kc](event);
+            }
+        }, false);
+
+        document.addEventListener("mouseup", function (event)
+        {
+            var btn = event.button;
+            mouseBtnStatuses[btn] = false;
+            if (mouseUpHandlers.hasOwnProperty(btn))
+            {
+                event.preventDefault();
+                mouseUpHandlers[btn](event);
+            }
+        }, false);
+
+        document.addEventListener("mousemove", function (event)
+        {
+            mousePos.x = event.clientX;
+            mousePos.y = event.clientY;
+        }, false);
+    };
+
     BETA.isButtonDown = function (button)
     {
+        BETA.assert(inputInitiated, "isButtonDown(): You haven't initiated the input system yet!");
         var btn = button.toLowerCase();
         if (keyCodes.hasOwnProperty(btn))
         {
@@ -587,11 +656,9 @@
         throw new Error("isButtonDown(): Unknown button '" + button + "'");
     };
 
-    var keyDownHandlers = {};
-    var mouseDownHandlers = {};
-
     BETA.onButtonDown = function (button, callback)
     {
+        BETA.assert(inputInitiated, "onButtonDown(): You haven't initiated the input system yet!");
         var btn = button.toLowerCase();
         if (keyCodes.hasOwnProperty(btn))
         {
@@ -607,36 +674,9 @@
         }
     };
 
-    document.addEventListener("keydown", function (event)
-    {
-        var kc = event.keyCode;
-        if (!keyStatuses[kc]) //prevents repeat when button is held
-        {
-            keyStatuses[kc] = true;
-            if (keyDownHandlers.hasOwnProperty(kc))
-            {
-                event.preventDefault();
-                keyDownHandlers[kc](event);
-            }
-        }
-    }, false);
-
-    document.addEventListener("mousedown", function (event)
-    {
-        var btn = event.button;
-        mouseBtnStatuses[btn] = true;
-        if (mouseDownHandlers.hasOwnProperty(btn))
-        {
-            event.preventDefault();
-            mouseDownHandlers[btn](event);
-        }
-    }, false);
-
-    var keyUpHandlers = {};
-    var mouseUpHandlers = {};
-
     BETA.onButtonUp = function (button, callback)
     {
+        BETA.assert(inputInitiated, "onButtonUp(): You haven't initiated the input system yet!");
         var btn = button.toLowerCase();
         if (keyCodes.hasOwnProperty(btn))
         {
@@ -652,38 +692,9 @@
         }
     };
 
-    document.addEventListener("keyup", function (event)
-    {
-        var kc = event.keyCode;
-        keyStatuses[kc] = false;
-        if (keyUpHandlers.hasOwnProperty(kc))
-        {
-            event.preventDefault();
-            keyUpHandlers[kc](event);
-        }
-    }, false);
-
-    document.addEventListener("mouseup", function (event)
-    {
-        var btn = event.button;
-        mouseBtnStatuses[btn] = false;
-        if (mouseUpHandlers.hasOwnProperty(btn))
-        {
-            event.preventDefault();
-            mouseUpHandlers[btn](event);
-        }
-    }, false);
-
-    var mousePos = { x: 0, y: 0 };
-
-    document.addEventListener("mousemove", function (event)
-    {
-        mousePos.x = event.clientX;
-        mousePos.y = event.clientY;
-    }, false);
-
     canvasRendererProto.getMousePos = function ()
     {
+        BETA.assert(inputInitiated, "getMousePos(): You haven't initiated the input system yet!");
         var rect = this.canvas.getBoundingClientRect();
         return BETA.v(
             Math.round(mousePos.x - rect.left),
