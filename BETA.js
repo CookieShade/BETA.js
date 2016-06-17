@@ -404,7 +404,7 @@
         this.context.arc(pos.x, pos.y, radius, startRadians, endRadians);
         this.context.closePath();
         this.context.stroke();
-    }
+    };
 
     canvasRendererProto.arc = function (pos, radius, startAngle, endAngle, thickness, style)
     {
@@ -555,4 +555,149 @@
         delete animations[id];
     };
 
+    //-------------INPUT HANDLING-------------\\
+
+    var keyCodes = {
+        a: 65, b: 66, c: 67, d: 68, e: 69, f: 70, g: 71, h: 72, i: 73, j: 74, k: 75, l: 76, m: 77,
+        n: 78, o: 79, p: 80, q: 81, r: 82, s: 83, t: 84, u: 85, v: 86, w: 87, x: 88, y: 89, z: 90,
+        num0: 48, num1: 49, num2: 50, num3: 51, num4: 52, num5: 53, num6: 54, num7: 55, num8: 56, num9: 57,
+        space: 32, enter: 13, tab: 9, esc: 27, backspace: 8, shift: 16, ctrl: 17, alt: 18,
+        capslock: 20, numlock: 144, left: 37, up: 38, right: 39, down: 40, insert: 45, del: 46,
+        f1: 112, f2: 113, f3: 114, f4: 115, f5: 116, f6: 117, f7: 118, f8: 119, f9: 120, f10: 121, f11: 122, f12: 123
+    };
+
+    var mouseBtns = {
+        mouse1: 0, mouse2: 2, mouse3: 1, mouse4: 3, mouse5: 4
+    };
+
+    var keyStatuses = {};
+    var mouseBtnStatuses = {};
+
+    var keyDownHandlers = {};
+    var mouseDownHandlers = {};
+
+    var keyUpHandlers = {};
+    var mouseUpHandlers = {};
+
+    var mousePos = { x: 0, y: 0 };
+
+    var inputInitiated = false;
+
+    BETA.initInput = function ()
+    {
+        inputInitiated = true;
+
+        document.addEventListener("keydown", function (event)
+        {
+            var kc = event.keyCode;
+            if (!keyStatuses[kc]) //prevents repeat when button is held
+            {
+                keyStatuses[kc] = true;
+                if (keyDownHandlers.hasOwnProperty(kc))
+                {
+                    event.preventDefault();
+                    keyDownHandlers[kc](event);
+                }
+            }
+        }, false);
+
+        document.addEventListener("mousedown", function (event)
+        {
+            var btn = event.button;
+            mouseBtnStatuses[btn] = true;
+            if (mouseDownHandlers.hasOwnProperty(btn))
+            {
+                event.preventDefault();
+                mouseDownHandlers[btn](event);
+            }
+        }, false);
+
+        document.addEventListener("keyup", function (event)
+        {
+            var kc = event.keyCode;
+            keyStatuses[kc] = false;
+            if (keyUpHandlers.hasOwnProperty(kc))
+            {
+                event.preventDefault();
+                keyUpHandlers[kc](event);
+            }
+        }, false);
+
+        document.addEventListener("mouseup", function (event)
+        {
+            var btn = event.button;
+            mouseBtnStatuses[btn] = false;
+            if (mouseUpHandlers.hasOwnProperty(btn))
+            {
+                event.preventDefault();
+                mouseUpHandlers[btn](event);
+            }
+        }, false);
+
+        document.addEventListener("mousemove", function (event)
+        {
+            mousePos.x = event.clientX;
+            mousePos.y = event.clientY;
+        }, false);
+    };
+
+    BETA.isButtonDown = function (button)
+    {
+        BETA.assert(inputInitiated, "isButtonDown(): You haven't initiated the input system yet!");
+        var btn = button.toLowerCase();
+        if (keyCodes.hasOwnProperty(btn))
+        {
+            return !!keyStatuses[keyCodes[btn]];
+        }
+        else if (mouseBtns.hasOwnProperty(btn))
+        {
+            return !!mouseBtnStatuses[mouseBtns[btn]];
+        }
+        throw new Error("isButtonDown(): Unknown button '" + button + "'");
+    };
+
+    BETA.onButtonDown = function (button, callback)
+    {
+        BETA.assert(inputInitiated, "onButtonDown(): You haven't initiated the input system yet!");
+        var btn = button.toLowerCase();
+        if (keyCodes.hasOwnProperty(btn))
+        {
+            keyDownHandlers[keyCodes[btn]] = callback;
+        }
+        else if (mouseBtns.hasOwnProperty(btn))
+        {
+            mouseDownHandlers[mouseBtns[btn]] = callback;
+        }
+        else
+        {
+            throw new Error("onButtonDown(): Unknown button '" + button + "'");
+        }
+    };
+
+    BETA.onButtonUp = function (button, callback)
+    {
+        BETA.assert(inputInitiated, "onButtonUp(): You haven't initiated the input system yet!");
+        var btn = button.toLowerCase();
+        if (keyCodes.hasOwnProperty(btn))
+        {
+            keyUpHandlers[keyCodes[btn]] = callback;
+        }
+        else if (mouseBtns.hasOwnProperty(btn))
+        {
+            mouseUpHandlers[mouseBtns[btn]] = callback;
+        }
+        else
+        {
+            throw new Error("onButtonUp(): Unknown button '" + button + "'");
+        }
+    };
+
+    canvasRendererProto.getMousePos = function ()
+    {
+        BETA.assert(inputInitiated, "getMousePos(): You haven't initiated the input system yet!");
+        var rect = this.canvas.getBoundingClientRect();
+        return BETA.v(
+            Math.round(mousePos.x - rect.left),
+            Math.round(mousePos.y - rect.top));
+    };
 }());
