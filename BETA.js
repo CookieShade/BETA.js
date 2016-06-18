@@ -332,13 +332,12 @@
 
     canvasRendererProto.vectorResize = function (vector)
     {
-        this.width = vector.x;
-        this.height = vector.y;
-        this.size = BETA.v(vector.x, vector.y);
-        this.canvas.width = vector.x;
-        this.canvas.height = vector.y;
-        this.canvas.style.width = vector.x + "px";
-        this.canvas.style.height = vector.y + "px";
+        this.resize(vector.x, vector.y);
+    };
+
+    canvasRendererProto.resizeToMax = function ()
+    {
+        this.resize(window.innerWidth, window.innerHeight);
     };
 
     canvasRendererProto.line = function (posA, posB, thickness, style)
@@ -464,6 +463,21 @@
         }
     };
 
+    canvasRendererProto.clear = function ()
+    {
+        this.context.clearRect(0, 0, this.width, this.height);
+    };
+
+    canvasRendererProto.clearRect = function (pos, size)
+    {
+        this.context.clearRect(pos.x, pos.y, size.x, size.y);
+    };
+
+    canvasRendererProto.fill = function (style)
+    {
+        this.fillRect({ x: 0, y: 0 }, this.size, style);
+    };
+
     canvasRendererProto.drawImage = function (img, pos, size)
     {
         if (size)
@@ -474,6 +488,13 @@
         {
             this.context.drawImage(img, pos.x, pos.y);
         }
+    };
+
+    canvasRendererProto.text = function (pos, text, font, size, style)
+    {
+        this.context.font = size + "px " + font;
+        this.context.fillStyle = style;
+        this.context.fillText(text, pos.x, pos.y);
     };
 
     canvasRendererProto.translate = function (x, y)
