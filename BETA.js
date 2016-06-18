@@ -330,7 +330,7 @@
         this.canvas.style.height = y + "px";
     };
 
-    canvasRendererProto.vectorResize = function (vector)
+    canvasRendererProto.resizeByVector = function (vector)
     {
         this.resize(vector.x, vector.y);
     };
@@ -502,7 +502,7 @@
         this.context.translate(x, y);
     };
 
-    canvasRendererProto.vectorTranslate = function (vector)
+    canvasRendererProto.translateByVector = function (vector)
     {
         this.context.translate(vector.x, vector.y);
     };
@@ -512,7 +512,7 @@
         this.context.scale(x, y);
     };
 
-    canvasRendererProto.vectorScale = function (vector)
+    canvasRendererProto.scaleByVector = function (vector)
     {
         this.context.scale(vector.x, vector.y);
     };
