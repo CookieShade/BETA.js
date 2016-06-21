@@ -259,6 +259,11 @@
         return (v.x === 0 && v.y === 0) ? v : BETA.vScalarDiv(v, BETA.vMagnitude(v));
     };
 
+    BETA.vAngle = function (vec)
+    {
+        return Math.atan2(vec.y, vec.x) * (180 / Math.PI);
+    };
+
     //------------IMAGE FUNCTIONS-------------\\
 
     BETA.images = [];
