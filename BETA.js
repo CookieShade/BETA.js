@@ -264,6 +264,15 @@
         return Math.atan2(vec.y, vec.x) * (180 / Math.PI);
     };
 
+    BETA.vFromPolar = function (radius, angle)
+    {
+        var radians = angle * (Math.PI / 180);
+        return {
+            x: Math.cos(radians) * radius,
+            y: Math.sin(radians) * radius
+        };
+    };
+
     //------------IMAGE FUNCTIONS-------------\\
 
     BETA.images = [];
