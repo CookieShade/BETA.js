@@ -278,6 +278,11 @@
         return BETA.vMagnitude(BETA.vSubtract(v1, v2));
     };
 
+    BETA.vGridDist = function (v1, v2)
+    {
+        return Math.abs(v1.x - v2.x) + Math.abs(v1.y - v2.y);
+    };
+
     //------------IMAGE FUNCTIONS-------------\\
 
     BETA.images = [];
