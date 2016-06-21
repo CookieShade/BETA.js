@@ -273,6 +273,11 @@
         };
     };
 
+    BETA.vDistance = function (v1, v2)
+    {
+        return BETA.vMagnitude(BETA.vSubtract(v1, v2));
+    };
+
     //------------IMAGE FUNCTIONS-------------\\
 
     BETA.images = [];
