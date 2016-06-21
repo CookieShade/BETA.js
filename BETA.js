@@ -283,6 +283,21 @@
         return Math.abs(v1.x - v2.x) + Math.abs(v1.y - v2.y);
     };
 
+    BETA.vRotate = function (vec, pivot, angle)
+    {
+        var radians = angle * (Math.PI / 180);
+        var sin = Math.sin(radians);
+        var cos = Math.cos(radians);
+        var dx = vec.x - pivot.x;
+        var dy = vec.y - pivot.y;
+        var rx = dx * cos - dy * sin;
+        var ry = dx * sin + dy * cos;
+        return {
+            x: rx + pivot.x,
+            y: ry + pivot.y
+        };
+    };
+
     //------------IMAGE FUNCTIONS-------------\\
 
     BETA.images = [];
