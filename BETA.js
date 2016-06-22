@@ -203,6 +203,11 @@
 
     BETA.v = BETA.vector;
 
+    BETA.vCopy = function (v)
+    {
+        return { x: v.x, y: v.y };
+    };
+
     BETA.vStringify = function (v)
     {
         return "(" + v.x + ", " + v.y + ")";
