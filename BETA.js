@@ -196,20 +196,9 @@
 
     //------------VECTOR FUNCTIONS------------\\
 
-    BETA.vProto = {
-        toString: function ()
-        {
-            return BETA.vStringify(this);
-        }
-    };
-
     BETA.vector = function (x, y)
     {
-        //Vectors inherit .toString() from vProto
-        var v = Object.create(BETA.vProto);
-        v.x = x;
-        v.y = y;
-        return v;
+        return { x: x, y: y };
     };
 
     BETA.v = BETA.vector;
@@ -221,17 +210,26 @@
 
     BETA.vAdd = function (v1, v2)
     {
-        return BETA.v(v1.x + v2.x, v1.y + v2.y);
+        return {
+            x: v1.x + v2.x,
+            y: v1.y + v2.y
+        };
     };
 
     BETA.vSubtract = function (v1, v2)
     {
-        return BETA.v(v1.x - v2.x, v1.y - v2.y);
+        return {
+            x: v1.x - v2.x,
+            y: v1.y - v2.y
+        };
     };
 
     BETA.vScale = function (v1, v2)
     {
-        return BETA.v(v1.x * v2.x, v1.y * v2.y);
+        return {
+            x: v1.x * v2.x,
+            y: v1.y * v2.y
+        };
     };
 
     BETA.vDot = function (v1, v2)
@@ -241,12 +239,18 @@
 
     BETA.vScalarMult = function (v, s)
     {
-        return BETA.v(v.x * s, v.y * s);
+        return {
+            x: v.x * s,
+            y: v.y * s
+        };
     };
 
     BETA.vScalarDiv = function (v, s)
     {
-        return BETA.v(v.x / s, v.y / s);
+        return {
+            x: v.x / s,
+            y: v.y / s
+        };
     };
 
     BETA.vMagnitude = function (v)
@@ -256,7 +260,9 @@
 
     BETA.vNormalize = function (v)
     {
-        return (v.x === 0 && v.y === 0) ? v : BETA.vScalarDiv(v, BETA.vMagnitude(v));
+        return (v.x === 0 && v.y === 0) ?
+            v :
+            BETA.vScalarDiv(v, BETA.vMagnitude(v));
     };
 
     BETA.vAngle = function (vec)
@@ -353,7 +359,7 @@
         renderer.context = context;
         renderer.width = canvas.width;
         renderer.height = canvas.height;
-        renderer.size = BETA.v(canvas.width, canvas.height);
+        renderer.size = { x: canvas.width, y: canvas.height };
 
         return renderer;
     };
@@ -362,7 +368,7 @@
     {
         this.width = x;
         this.height = y;
-        this.size = BETA.v(x, y);
+        this.size = { x: x, y: y };
         this.canvas.width = x;
         this.canvas.height = y;
         this.canvas.style.width = x + "px";
@@ -756,8 +762,9 @@
     {
         BETA.assert(inputInitiated, "getMousePos(): You haven't initiated the input system yet!");
         var rect = this.canvas.getBoundingClientRect();
-        return BETA.v(
-            Math.round(mousePos.x - rect.left),
-            Math.round(mousePos.y - rect.top));
+        return {
+            x: Math.round(mousePos.x - rect.left),
+            y: Math.round(mousePos.y - rect.top)
+        };
     };
 }());
