@@ -43,6 +43,11 @@
             Math.max(b, Math.min(a, val));
     };
 
+    BETA.randNum = function (a, b)
+    {
+        return a + Math.random() * (b - a);
+    };
+
     //------------COLOR FUNCTIONS-----------\\
 
     BETA.colorProto = {
