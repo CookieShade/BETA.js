@@ -54,9 +54,14 @@
         var max = (a < b) ? Math.floor(b) : Math.floor(a);
 
         return (min > max) ?
-            NaN :
+            NaN : //min > max when [a, b] contains no integers
             min + Math.floor(Math.random() * (1 + b - a));
-    }
+    };
+
+    BETA.randElement = function (arr)
+    {
+        return arr[Math.floor(Math.random() * arr.length)];
+    };
 
     //------------COLOR FUNCTIONS-----------\\
 
