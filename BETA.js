@@ -43,6 +43,26 @@
             Math.max(b, Math.min(a, val));
     };
 
+    BETA.randNum = function (a, b)
+    {
+        return a + Math.random() * (b - a);
+    };
+
+    BETA.randInt = function (a, b)
+    {
+        var min = (a < b) ? Math.ceil(a) : Math.ceil(b);
+        var max = (a < b) ? Math.floor(b) : Math.floor(a);
+        
+        return (min > max) ?
+            NaN : //happens when [a, b] contains no integers
+            min + Math.floor(Math.random() * (1 + max - min));
+    };
+
+    BETA.randElement = function (arr)
+    {
+        return arr[Math.floor(Math.random() * arr.length)];
+    };
+
     //------------COLOR FUNCTIONS-----------\\
 
     BETA.colorProto = {
