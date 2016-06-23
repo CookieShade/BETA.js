@@ -52,10 +52,10 @@
     {
         var min = (a < b) ? Math.ceil(a) : Math.ceil(b);
         var max = (a < b) ? Math.floor(b) : Math.floor(a);
-
+        
         return (min > max) ?
-            NaN : //min > max when [a, b] contains no integers
-            min + Math.floor(Math.random() * (1 + b - a));
+            NaN : //happens when [a, b] contains no integers
+            min + Math.floor(Math.random() * (1 + max - min));
     };
 
     BETA.randElement = function (arr)
