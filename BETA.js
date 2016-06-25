@@ -96,48 +96,29 @@
         return BETA.rgba(red, green, blue, 1);
     };
 
-    //HSL conversion made by GitHub user mjackson
-    //https://gist.github.com/mjackson/5311256
-    BETA.hueToRgbChannel = function (p, q, t)
+    BETA.hueToRgbChannel = function (m1, m2, h)
     {
-        var ret;
-        if (t < 0) { t += 1; }
-        if (t > 1) { t -= 1; }
-
-        if (t < 1 / 6) { ret = (p + (q - p) * 6 * t); }
-        else if (t < 1 / 2) { ret = q; }
-        else if (t < 2 / 3) { ret = (p + (q - p) * (2 / 3 - t) * 6); }
-        else { ret = p; }
-        return ret * 255;
+        if (h < 0) { h += 1; }
+        if (h > 1) { h -= 1; }
+        if (h * 6 < 1) { return m1 + (m2 - m1) * h * 6; }
+        if (h * 2 < 1) { return m2; }
+        if (h * 3 < 2) { return m1 + (m2 - m1) * (2 / 3 - h) * 6; }
+        return m1;
     };
 
     BETA.hsla = function (hue, saturation, lightness, alpha)
     {
         var h = BETA.mod(hue, 360) / 360;
-        var s = BETA.clamp(saturation / 100, 0, 1);
-        var l = BETA.clamp(lightness / 100, 0, 1);
-        var r;
-        var g;
-        var b;
+        var s = BETA.clamp(saturation, 0, 100) / 100;
+        var l = BETA.clamp(lightness, 0, 100) / 100;
 
-        if (saturation === 0)
-        {
-            var c = (l * 255);
-            r = c;
-            g = c;
-            b = c;
-        }
-        else
-        {
-            var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-            var p = 2 * l - q;
+        var m2 = (l <= 0.5) ? l * (s + 1) : l + s - l * s;
+        var m1 = l * 2 - m2;
+        var r = BETA.hueToRgbChannel(m1, m2, h + 1 / 3);
+        var g = BETA.hueToRgbChannel(m1, m2, h);
+        var b = BETA.hueToRgbChannel(m1, m2, h - 1 / 3);
 
-            r = BETA.hueToRgbChannel(p, q, h + 1 / 3);
-            g = BETA.hueToRgbChannel(p, q, h);
-            b = BETA.hueToRgbChannel(p, q, h - 1 / 3);
-        }
-
-        return BETA.rgba(r, g, b, alpha);
+        return BETA.rgba(r * 255, g * 255, b * 255, alpha);
     };
 
     BETA.hsl = function (hue, saturation, lightness)
@@ -649,7 +630,7 @@
     //-------------INPUT HANDLING-------------\\
 
     var keyCodes = {
-        a: 65, b: 66, c: 67, d: 68, e: 69, f: 70, g: 71, h: 72, i: 73, j: 74, k: 75, l: 76, m: 77,
+        a: 65, b: 66, c: 67, d: 68, e: 69, f: 70, g: 71, h: 72, i: 73, j: 74, k: 75, lightness: 76, m: 77,
         n: 78, o: 79, p: 80, q: 81, r: 82, s: 83, t: 84, u: 85, v: 86, w: 87, x: 88, y: 89, z: 90,
         num0: 48, num1: 49, num2: 50, num3: 51, num4: 52, num5: 53, num6: 54, num7: 55, num8: 56, num9: 57,
         space: 32, enter: 13, tab: 9, esc: 27, backspace: 8, shift: 16, ctrl: 17, alt: 18,
