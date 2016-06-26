@@ -65,7 +65,7 @@
 
     //------------COLOR FUNCTIONS-----------\\
 
-    BETA.colorProto = {
+    var colorProto = {
         toString: function ()
         {
             return (this.a >= 1) ?
@@ -74,19 +74,19 @@
         }
     };
 
-    BETA.rgbChannelConform = function (val)
+    function rgbChannelConform(val)
     {
         return Math.max(0, Math.min(255, Math.round(val)));
-    };
+    }
 
     BETA.rgba = function (red, green, blue, alpha)
     {
         alpha = (alpha !== undefined) ? alpha : 1;
 
-        var color = Object.create(BETA.colorProto);
-        color.r = BETA.rgbChannelConform(red);
-        color.g = BETA.rgbChannelConform(green);
-        color.b = BETA.rgbChannelConform(blue);
+        var color = Object.create(colorProto);
+        color.r = rgbChannelConform(red);
+        color.g = rgbChannelConform(green);
+        color.b = rgbChannelConform(blue);
         color.a = BETA.clamp(alpha, 0, 1);
         return color;
     };
@@ -96,7 +96,7 @@
         return BETA.rgba(red, green, blue, 1);
     };
 
-    BETA.hueToRgbChannel = function (m1, m2, h)
+    function hueToRgbChannel(m1, m2, h)
     {
         if (h < 0) { h += 1; }
         if (h > 1) { h -= 1; }
@@ -104,7 +104,7 @@
         if (h * 2 < 1) { return m2; }
         if (h * 3 < 2) { return m1 + (m2 - m1) * (2 / 3 - h) * 6; }
         return m1;
-    };
+    }
 
     BETA.hsla = function (hue, saturation, lightness, alpha)
     {
@@ -114,9 +114,9 @@
 
         var m2 = (l <= 0.5) ? l * (s + 1) : l + s - l * s;
         var m1 = l * 2 - m2;
-        var r = BETA.hueToRgbChannel(m1, m2, h + 1 / 3);
-        var g = BETA.hueToRgbChannel(m1, m2, h);
-        var b = BETA.hueToRgbChannel(m1, m2, h - 1 / 3);
+        var r = hueToRgbChannel(m1, m2, h + 1 / 3);
+        var g = hueToRgbChannel(m1, m2, h);
+        var b = hueToRgbChannel(m1, m2, h - 1 / 3);
 
         return BETA.rgba(r * 255, g * 255, b * 255, alpha);
     };
@@ -312,7 +312,7 @@
 
     //------------IMAGE FUNCTIONS-------------\\
 
-    BETA.images = [];
+    var images = [];
 
     var loadingImgs = 0;
 
@@ -333,7 +333,7 @@
             }
         };
         img.src = url;
-        BETA.images.push(img);
+        images.push(img);
 
         return img;
     };
@@ -391,9 +391,9 @@
         this.resize(window.innerWidth, window.innerHeight);
     };
 
-    canvasRendererProto.line = function (posA, posB, thickness, style)
+    canvasRendererProto.line = function (posA, posB, thickness, color)
     {
-        this.context.strokeStyle = style;
+        this.context.strokeStyle = color;
         this.context.lineWidth = thickness;
         this.context.beginPath();
         this.context.moveTo(posA.x, posA.y);
@@ -401,24 +401,24 @@
         this.context.stroke();
     };
 
-    canvasRendererProto.fillCircle = function (pos, radius, style)
+    canvasRendererProto.fillCircle = function (pos, radius, color)
     {
-        this.context.fillStyle = style;
+        this.context.fillStyle = color;
         this.context.beginPath();
         this.context.arc(pos.x, pos.y, radius, 0, Math.PI * 2, true);
         this.context.fill();
     };
 
-    canvasRendererProto.lineCircle = function (pos, radius, thickness, style)
+    canvasRendererProto.lineCircle = function (pos, radius, thickness, color)
     {
-        this.context.strokeStyle = style;
+        this.context.strokeStyle = color;
         this.context.lineWidth = thickness;
         this.context.beginPath();
         this.context.arc(pos.x, pos.y, radius, 0, Math.PI * 2, true);
         this.context.stroke();
     };
 
-    canvasRendererProto.fillSector = function (pos, radius, startAngle, endAngle, style)
+    canvasRendererProto.fillSector = function (pos, radius, startAngle, endAngle, color)
     {
         var startRadians = startAngle * Math.PI / 180;
         var endRadians = endAngle * Math.PI / 180;
@@ -427,7 +427,7 @@
         var arcPointX = pos.x + Math.cos(startRadians) * radius;
         var arcPointY = pos.y + Math.sin(startRadians) * radius;
 
-        this.context.fillStyle = style;
+        this.context.fillStyle = color;
 
         this.context.beginPath();
         this.context.moveTo(pos.x, pos.y);
@@ -436,7 +436,7 @@
         this.context.fill();
     };
 
-    canvasRendererProto.lineSector = function (pos, radius, startAngle, endAngle, thickness, style)
+    canvasRendererProto.lineSector = function (pos, radius, startAngle, endAngle, thickness, color)
     {
         var startRadians = startAngle * Math.PI / 180;
         var endRadians = endAngle * Math.PI / 180;
@@ -445,7 +445,7 @@
         var arcPointX = pos.x + Math.cos(startRadians) * radius;
         var arcPointY = pos.y + Math.sin(startRadians) * radius;
 
-        this.context.strokeStyle = style;
+        this.context.strokeStyle = color;
         this.context.lineWidth = thickness;
 
         this.context.beginPath();
@@ -456,12 +456,12 @@
         this.context.stroke();
     };
 
-    canvasRendererProto.arc = function (pos, radius, startAngle, endAngle, thickness, style)
+    canvasRendererProto.arc = function (pos, radius, startAngle, endAngle, thickness, color)
     {
         var startRadians = startAngle * (Math.PI / 180);
         var endRadians = endAngle * (Math.PI / 180);
 
-        this.context.strokeStyle = style;
+        this.context.strokeStyle = color;
         this.context.lineWidth = thickness;
 
         this.context.beginPath();
@@ -469,22 +469,22 @@
         this.context.stroke();
     };
 
-    canvasRendererProto.fillRect = function (pos, size, style)
+    canvasRendererProto.fillRect = function (pos, size, color)
     {
-        this.context.fillStyle = style;
+        this.context.fillStyle = color;
         this.context.fillRect(pos.x, pos.y, size.x, size.y);
     };
 
-    canvasRendererProto.lineRect = function (pos, size, thickness, style)
+    canvasRendererProto.lineRect = function (pos, size, thickness, color)
     {
-        this.context.strokeStyle = style;
+        this.context.strokeStyle = color;
         this.context.lineWidth = thickness;
         this.context.strokeRect(pos.x, pos.y, size.x, size.y);
     };
 
-    canvasRendererProto.fillPolygon = function (posArray, style)
+    canvasRendererProto.fillPolygon = function (posArray, color)
     {
-        this.context.fillStyle = style;
+        this.context.fillStyle = color;
         if (posArray.length > 1)
         {
             this.context.beginPath();
@@ -497,9 +497,9 @@
         }
     };
 
-    canvasRendererProto.linePolygon = function (posArray, thickness, style)
+    canvasRendererProto.linePolygon = function (posArray, thickness, color)
     {
-        this.context.strokeStyle = style;
+        this.context.strokeStyle = color;
         this.context.lineWidth = thickness;
         if (posArray.length > 1)
         {
@@ -524,9 +524,9 @@
         this.context.clearRect(pos.x, pos.y, size.x, size.y);
     };
 
-    canvasRendererProto.fill = function (style)
+    canvasRendererProto.fill = function (color)
     {
-        this.fillRect({ x: 0, y: 0 }, this.size, style);
+        this.fillRect({ x: 0, y: 0 }, this.size, color);
     };
 
     canvasRendererProto.drawImage = function (img, pos, size)
@@ -541,10 +541,10 @@
         }
     };
 
-    canvasRendererProto.text = function (pos, text, font, size, style)
+    canvasRendererProto.text = function (pos, text, font, size, color)
     {
         this.context.font = size + "px " + font;
-        this.context.fillStyle = style;
+        this.context.fillStyle = color;
         this.context.fillText(text, pos.x, pos.y);
     };
 
@@ -607,7 +607,7 @@
                 (time - prevTime) / 1000
                 : 0;
 
-            callback({ time: time, deltaTime: deltaTime });
+            callback(deltaTime);
 
             prevTime = time;
         });
@@ -764,10 +764,10 @@
         }
     };
 
-    canvasRendererProto.getMousePos = function ()
+    BETA.getMousePos = function (renderer)
     {
         BETA.assert(inputInitiated, "getMousePos(): You haven't initiated the input system yet!");
-        var rect = this.canvas.getBoundingClientRect();
+        var rect = renderer.canvas.getBoundingClientRect();
         return {
             x: Math.round(mousePos.x - rect.left),
             y: Math.round(mousePos.y - rect.top)
