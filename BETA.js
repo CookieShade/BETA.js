@@ -391,9 +391,9 @@
         this.resize(window.innerWidth, window.innerHeight);
     };
 
-    canvasRendererProto.line = function (posA, posB, thickness, style)
+    canvasRendererProto.line = function (posA, posB, thickness, color)
     {
-        this.context.strokeStyle = style;
+        this.context.strokeStyle = color;
         this.context.lineWidth = thickness;
         this.context.beginPath();
         this.context.moveTo(posA.x, posA.y);
@@ -401,24 +401,24 @@
         this.context.stroke();
     };
 
-    canvasRendererProto.fillCircle = function (pos, radius, style)
+    canvasRendererProto.fillCircle = function (pos, radius, color)
     {
-        this.context.fillStyle = style;
+        this.context.fillStyle = color;
         this.context.beginPath();
         this.context.arc(pos.x, pos.y, radius, 0, Math.PI * 2, true);
         this.context.fill();
     };
 
-    canvasRendererProto.lineCircle = function (pos, radius, thickness, style)
+    canvasRendererProto.lineCircle = function (pos, radius, thickness, color)
     {
-        this.context.strokeStyle = style;
+        this.context.strokeStyle = color;
         this.context.lineWidth = thickness;
         this.context.beginPath();
         this.context.arc(pos.x, pos.y, radius, 0, Math.PI * 2, true);
         this.context.stroke();
     };
 
-    canvasRendererProto.fillSector = function (pos, radius, startAngle, endAngle, style)
+    canvasRendererProto.fillSector = function (pos, radius, startAngle, endAngle, color)
     {
         var startRadians = startAngle * Math.PI / 180;
         var endRadians = endAngle * Math.PI / 180;
@@ -427,7 +427,7 @@
         var arcPointX = pos.x + Math.cos(startRadians) * radius;
         var arcPointY = pos.y + Math.sin(startRadians) * radius;
 
-        this.context.fillStyle = style;
+        this.context.fillStyle = color;
 
         this.context.beginPath();
         this.context.moveTo(pos.x, pos.y);
@@ -436,7 +436,7 @@
         this.context.fill();
     };
 
-    canvasRendererProto.lineSector = function (pos, radius, startAngle, endAngle, thickness, style)
+    canvasRendererProto.lineSector = function (pos, radius, startAngle, endAngle, thickness, color)
     {
         var startRadians = startAngle * Math.PI / 180;
         var endRadians = endAngle * Math.PI / 180;
@@ -445,7 +445,7 @@
         var arcPointX = pos.x + Math.cos(startRadians) * radius;
         var arcPointY = pos.y + Math.sin(startRadians) * radius;
 
-        this.context.strokeStyle = style;
+        this.context.strokeStyle = color;
         this.context.lineWidth = thickness;
 
         this.context.beginPath();
@@ -456,12 +456,12 @@
         this.context.stroke();
     };
 
-    canvasRendererProto.arc = function (pos, radius, startAngle, endAngle, thickness, style)
+    canvasRendererProto.arc = function (pos, radius, startAngle, endAngle, thickness, color)
     {
         var startRadians = startAngle * (Math.PI / 180);
         var endRadians = endAngle * (Math.PI / 180);
 
-        this.context.strokeStyle = style;
+        this.context.strokeStyle = color;
         this.context.lineWidth = thickness;
 
         this.context.beginPath();
@@ -469,22 +469,22 @@
         this.context.stroke();
     };
 
-    canvasRendererProto.fillRect = function (pos, size, style)
+    canvasRendererProto.fillRect = function (pos, size, color)
     {
-        this.context.fillStyle = style;
+        this.context.fillStyle = color;
         this.context.fillRect(pos.x, pos.y, size.x, size.y);
     };
 
-    canvasRendererProto.lineRect = function (pos, size, thickness, style)
+    canvasRendererProto.lineRect = function (pos, size, thickness, color)
     {
-        this.context.strokeStyle = style;
+        this.context.strokeStyle = color;
         this.context.lineWidth = thickness;
         this.context.strokeRect(pos.x, pos.y, size.x, size.y);
     };
 
-    canvasRendererProto.fillPolygon = function (posArray, style)
+    canvasRendererProto.fillPolygon = function (posArray, color)
     {
-        this.context.fillStyle = style;
+        this.context.fillStyle = color;
         if (posArray.length > 1)
         {
             this.context.beginPath();
@@ -497,9 +497,9 @@
         }
     };
 
-    canvasRendererProto.linePolygon = function (posArray, thickness, style)
+    canvasRendererProto.linePolygon = function (posArray, thickness, color)
     {
-        this.context.strokeStyle = style;
+        this.context.strokeStyle = color;
         this.context.lineWidth = thickness;
         if (posArray.length > 1)
         {
@@ -524,9 +524,9 @@
         this.context.clearRect(pos.x, pos.y, size.x, size.y);
     };
 
-    canvasRendererProto.fill = function (style)
+    canvasRendererProto.fill = function (color)
     {
-        this.fillRect({ x: 0, y: 0 }, this.size, style);
+        this.fillRect({ x: 0, y: 0 }, this.size, color);
     };
 
     canvasRendererProto.drawImage = function (img, pos, size)
@@ -541,10 +541,10 @@
         }
     };
 
-    canvasRendererProto.text = function (pos, text, font, size, style)
+    canvasRendererProto.text = function (pos, text, font, size, color)
     {
         this.context.font = size + "px " + font;
-        this.context.fillStyle = style;
+        this.context.fillStyle = color;
         this.context.fillText(text, pos.x, pos.y);
     };
 
