@@ -65,7 +65,7 @@
 
     //------------COLOR FUNCTIONS-----------\\
 
-    BETA.colorProto = {
+    var colorProto = {
         toString: function ()
         {
             return (this.a >= 1) ?
@@ -74,7 +74,7 @@
         }
     };
 
-    BETA.rgbChannelConform = function (val)
+    function rgbChannelConform(val)
     {
         return Math.max(0, Math.min(255, Math.round(val)));
     };
@@ -83,10 +83,10 @@
     {
         alpha = (alpha !== undefined) ? alpha : 1;
 
-        var color = Object.create(BETA.colorProto);
-        color.r = BETA.rgbChannelConform(red);
-        color.g = BETA.rgbChannelConform(green);
-        color.b = BETA.rgbChannelConform(blue);
+        var color = Object.create(colorProto);
+        color.r = rgbChannelConform(red);
+        color.g = rgbChannelConform(green);
+        color.b = rgbChannelConform(blue);
         color.a = BETA.clamp(alpha, 0, 1);
         return color;
     };
@@ -96,7 +96,7 @@
         return BETA.rgba(red, green, blue, 1);
     };
 
-    BETA.hueToRgbChannel = function (m1, m2, h)
+    function hueToRgbChannel(m1, m2, h)
     {
         if (h < 0) { h += 1; }
         if (h > 1) { h -= 1; }
@@ -104,7 +104,7 @@
         if (h * 2 < 1) { return m2; }
         if (h * 3 < 2) { return m1 + (m2 - m1) * (2 / 3 - h) * 6; }
         return m1;
-    };
+    }
 
     BETA.hsla = function (hue, saturation, lightness, alpha)
     {
@@ -114,9 +114,9 @@
 
         var m2 = (l <= 0.5) ? l * (s + 1) : l + s - l * s;
         var m1 = l * 2 - m2;
-        var r = BETA.hueToRgbChannel(m1, m2, h + 1 / 3);
-        var g = BETA.hueToRgbChannel(m1, m2, h);
-        var b = BETA.hueToRgbChannel(m1, m2, h - 1 / 3);
+        var r = hueToRgbChannel(m1, m2, h + 1 / 3);
+        var g = hueToRgbChannel(m1, m2, h);
+        var b = hueToRgbChannel(m1, m2, h - 1 / 3);
 
         return BETA.rgba(r * 255, g * 255, b * 255, alpha);
     };
@@ -312,7 +312,7 @@
 
     //------------IMAGE FUNCTIONS-------------\\
 
-    BETA.images = [];
+    var images = [];
 
     var loadingImgs = 0;
 
@@ -333,7 +333,7 @@
             }
         };
         img.src = url;
-        BETA.images.push(img);
+        images.push(img);
 
         return img;
     };
