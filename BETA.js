@@ -764,10 +764,10 @@
         }
     };
 
-    canvasRendererProto.getMousePos = function ()
+    BETA.getMousePos = function (renderer)
     {
         BETA.assert(inputInitiated, "getMousePos(): You haven't initiated the input system yet!");
-        var rect = this.canvas.getBoundingClientRect();
+        var rect = renderer.canvas.getBoundingClientRect();
         return {
             x: Math.round(mousePos.x - rect.left),
             y: Math.round(mousePos.y - rect.top)
