@@ -607,7 +607,7 @@
                 (time - prevTime) / 1000
                 : 0;
 
-            callback({ time: time, deltaTime: deltaTime });
+            callback(deltaTime);
 
             prevTime = time;
         });
