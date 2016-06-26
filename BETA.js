@@ -77,7 +77,7 @@
     function rgbChannelConform(val)
     {
         return Math.max(0, Math.min(255, Math.round(val)));
-    };
+    }
 
     BETA.rgba = function (red, green, blue, alpha)
     {
