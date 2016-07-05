@@ -1,5 +1,4 @@
 ## BETA.js
-##### BEtter Than Advanced.js
 A simple canvas-based JavaScript library for game prototyping and graphical experiments.
 
 The aim of this library is to reduce the amount of boring setup code required in graphics projects,
@@ -22,4 +21,6 @@ It does not attempt to:
 
 BETA.js is a library, not a framework.
 
-Thanks to Mikael Tylmad and Pontus Walck for creating [advanced.js](https://github.com/datorklubben/Spelprogrammering-med-JavaScript-och-Canvas) (documentation in Swedish), the primary inspiration for this library.
+##### BEtter Than Advanced.js
+
+Thanks to Mikael Tylmad and Pontus Walck for creating [advanced.js](https://github.com/datorklubben/Spelprogrammering-med-JavaScript-och-Canvas), the primary inspiration for this library.
