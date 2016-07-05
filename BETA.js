@@ -126,7 +126,6 @@
         return BETA.hsla(hue, saturation, lightness, 1);
     };
 
-    //Adapted from http://alvyray.com/Papers/CG/hsv2rgb.htm
     BETA.hsva = function (hue, saturation, value, alpha)
     {
         var h = BETA.mod(hue, 360) / 60;
@@ -159,7 +158,6 @@
         return BETA.hsva(hue, saturation, value, 1);
     };
 
-    //Adapted from http://alvyray.com/Papers/CG/hwb2rgb.htm
     BETA.hwba = function (hue, whiteness, blackness, alpha)
     {
         var h = BETA.mod(hue, 360) / 60;
