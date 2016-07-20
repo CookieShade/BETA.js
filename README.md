@@ -3,7 +3,9 @@ A simple canvas-based JavaScript library for game prototyping and graphical expe
 
 The aim of this library is to reduce the amount of boring setup code required in graphics projects,
 as well as to save developers from having to interact with the DOM API,
-possibly the greatest cause of mental illness of the modern age.
+because *I value the health and sanity of developers.*
+
+### Visit [the Wiki](https://github.com/CookieShade/BETA.js/wiki) for documentation
 
 **Caution:**
 BETA.js requires support for several ECMAScript 5 and modern DOM features, and so will not work in older browsers.
@@ -16,7 +18,7 @@ The API aims to be:
 
 It does not attempt to:
 - Support all browsers, past, present and future
-- Replace standard APIs
+- Replace standard APIs completely
 - Think for you
 
 BETA.js is a library, not a framework.
