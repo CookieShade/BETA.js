@@ -23,6 +23,8 @@ It does not attempt to:
 
 BETA.js is a library, not a framework.
 
+### Distributed under [the MIT license](https://github.com/CookieShade/BETA.js/blob/master/LICENSE.txt)
+
 ##### BEtter Than Advanced.js
 
 Thanks to Mikael Tylmad and Pontus Walck for creating [advanced.js](https://github.com/datorklubben/Spelprogrammering-med-JavaScript-och-Canvas), the primary inspiration for this library.
