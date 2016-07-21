@@ -7,8 +7,16 @@ because *I value the health and sanity of developers.*
 
 ### Visit [the Wiki](https://github.com/CookieShade/BETA.js/wiki) for documentation
 
-**Caution:**
-BETA.js requires support for several ECMAScript 5 and modern DOM features, and so will not work in older browsers.
+### Requirements
+A relatively modern browser, although no cutting-edge features are used.  
+Tested to work on Chrome 51 and Firefox 47.
+
+*Should* also work on:  
+- Chrome 24+  
+- Firefox 23+  
+- Internet Explorer 10+  
+- Opera 15+  
+- Safari 6.1+
 
 
 The API aims to be:
