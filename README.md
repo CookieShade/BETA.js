@@ -18,7 +18,17 @@ Tested to work on Chrome 51 and Firefox 47.
 - Opera 15+  
 - Safari 6.1+
 
+### Usage
+To get the latest version, add this line to your HTML file:
+```html
+<script src="https://rawgit.com/CookieShade/BETA.js/master/BETA.js"></script>
+```
+That's it! Now the entire library API is accessible through the global namespace `BETA`.
 
+If you want to use an older version, or make sure the library doesn't change, see
+[the Wiki section](https://github.com/CookieShade/BETA.js/wiki#usage) for other alternatives.
+
+---
 The API aims to be:
 - Simple
 - Easy to learn
