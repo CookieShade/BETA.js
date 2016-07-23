@@ -212,6 +212,11 @@
         return "(" + v.x + ", " + v.y + ")";
     };
 
+    BETA.vEquals = function (v1, v2)
+    {
+        return (v1.x === v2.x && v1.y === v2.y && typeof v1.x === "number" && typeof v1.y === "number");
+    };
+
     BETA.vAdd = function (v1, v2)
     {
         return {
