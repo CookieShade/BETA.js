@@ -593,18 +593,17 @@
 
     //------------ANIMATION SYSTEM------------\\
 
-    var animations = {};
+    var frameId = 0;
 
     BETA.animate = function (callback)
     {
+        BETA.assert(frameId === 0, "There is already an animation running!");
+
         var prevTime;
-        var frameId;
-        var animId;
 
         frameId = requestAnimationFrame(function animationFn(time)
         {
             frameId = requestAnimationFrame(animationFn);
-            animations[animId] = frameId;
 
             var deltaTime = prevTime ?
                 (time - prevTime) / 1000
@@ -614,20 +613,14 @@
 
             prevTime = time;
         });
-
-        animId = frameId;
-
-        animations[animId] = frameId;
-
-        return animId;
     };
 
-    BETA.stopAnimation = function (id)
+    BETA.stopAnimation = function ()
     {
-        BETA.assert(animations[id], "There is no animation with ID " + id);
+        BETA.assert(frameId > 0, "There is no animation running!");
 
-        cancelAnimationFrame(animations[id]);
-        delete animations[id];
+        cancelAnimationFrame(frameId);
+        frameId = 0;
     };
 
     //-------------INPUT HANDLING-------------\\
