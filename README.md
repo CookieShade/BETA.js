@@ -18,14 +18,24 @@ Tested to work on Chrome 51 and Firefox 47.
 - Opera 15+  
 - Safari 6.1+
 
-### Usage
-To get the latest version, add this line to your HTML file:
+### Getting started
 ```html
-<script src="https://rawgit.com/CookieShade/BETA.js/master/BETA.js"></script>
-```
-That's it! Now the entire library API is accessible through the global namespace `BETA`.
+<body style="margin: 0">
+    <canvas id="myCanvas"></canvas>
+    <script src="https://sudonet.net/beta/latest/beta.js"></script>
+    <script>
+        // The library is now defined in the global BETA variable.
+        var renderer = BETA.getRenderer("myCanvas");
+        renderer.resizeToMax();
 
-If you want to use an older version, or make sure the library doesn't change, see
+        renderer.fill("Black");
+
+        renderer.text({x: 100, y: 80}, "Hello World!", "Arial", 25, "White");
+    </script>
+</body>
+```
+
+If you want to use an older version, or make sure to always use the same version, see
 [the Wiki section](https://github.com/CookieShade/BETA.js/wiki#usage) for other alternatives.
 
 ---
