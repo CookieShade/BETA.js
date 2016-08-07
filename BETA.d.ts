@@ -67,6 +67,8 @@ declare namespace BETA
 
     function vDot(v1: Vector, v2: Vector): Vector;
 
+    function vComplexMult(v1: Vector, v2: Vector): Vector;
+
     function vScalarMult(v: Vector, s: number): Vector;
 
     function vScalarDiv(v: Vector, s: number): Vector;
