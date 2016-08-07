@@ -559,11 +559,11 @@
         this.context.fillText(text, pos.x, pos.y);
     };
 
-    canvasRendererProto.getTextWidth(text, font, size)
+    canvasRendererProto.getTextWidth = function (text, font, size)
     {
         this.context.font = size + "px " + font;
         return this.context.measureText(text).width;
-    }
+    };
 
     canvasRendererProto.translate = function (x, y)
     {
