@@ -16,7 +16,7 @@
         if (!assertion)
         {
             var msg = (message) ?
-                "Assertion failed: " + message :
+                message :
                 "Assertion failed.";
             throw new Error(msg);
         }
