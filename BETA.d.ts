@@ -146,6 +146,7 @@ declare namespace BETA
         drawImage(img: HTMLImageElement | HTMLVideoElement | HTMLCanvasElement, pos: Vector, size?: Vector): void;
 
         text(pos: Vector, text: string, font: string, size: number, color: CanvasStyle): void;
+        getTextWidth(text: string, font: string, size: number): number;
     }
 
     function getRenderer(id: string): CanvasRenderer;
