@@ -1,6 +1,6 @@
 declare namespace BETA
 {
-    function assert(assertion: boolean, message: string): void;
+    function assert(assertion: boolean, message?: string): void;
 
     function isNumber(val: any): boolean;
 
