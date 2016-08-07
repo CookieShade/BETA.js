@@ -368,6 +368,7 @@
     BETA.getRenderer = function (id)
     {
         var canvas = document.getElementById(id);
+        BETA.assert(canvas instanceof HTMLCanvasElement, "getRenderer(): Element #" + id + " is not a <canvas>");
         var context = canvas.getContext("2d");
 
         var renderer = Object.create(canvasRendererProto);
